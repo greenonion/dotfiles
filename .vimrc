@@ -1,68 +1,49 @@
 set nocompatible
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+filetype indent plugin on
 
-" let Vundle manage Vundle
-" required!
-Plugin 'gmarik/vundle'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'scrooloose/syntastic'
-Plugin 'plasticboy/vim-markdown'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'avakhov/vim-yaml'
-Plugin 'tpope/vim-rails.git' 
-Plugin 'tpope/vim-bundler.git' 
-Plugin 'Lokaltog/powerline'
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'cakebaker/scss-syntax.vim'
-
-call vundle#end()
-
+" Enable syntax highlighting
 syntax on
-set number
-filetype plugin indent on
-set t_Co=256
-set textwidth=80  " lines longer than 80 columns will be broken
-set shiftwidth=4  " operation >> indents 4 columns; << unindents 4 columns
-set tabstop=4     " a hard TAB displays as 4 columns
-set expandtab     " insert spaces when hitting TABs
-set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
-set shiftround    " round indent to multiple of 'shiftwidth'
-set autoindent    " align the new line indent with the previous line
 
-" search config
-set incsearch
+set hidden
+
+set wildmenu
+
+set showcmd
+
+set hlsearch
+
+set nomodeline
+
 set ignorecase
 set smartcase
-set hlsearch
-nmap \q :nohlsearch<CR>
 
-autocmd FileType ruby setlocal sw=2 sts=2 et
-autocmd FileType yaml setlocal sw=2 sts=2 et
-autocmd FileType scss setlocal sw=2 sts=2 et
-autocmd FileType html setlocal sw=2 sts=2 et
-autocmd FileType erb setlocal sw=2 sts=2 et
+set backspace=indent,eol,start
 
-" trim white space
-autocmd FileType rb,scss,py,erb,html,css autocmd BufWritePre <buffer> :%s/\s\+$//e
+set autoindent
 
-let g:ycm_autoclose_preview_window_after_completion = 1
+set nostartofline
 
-let g:molokai_original = 1
-colorscheme molokai
+set ruler
 
-" rubocop
-let g:syntastic_ruby_checkers = ['rubocop']
-
-" paste toggle
-set pastetoggle=<F2>
-
-" powerline
 set laststatus=2
-set encoding=utf-8
-let g:Powerline_symbols = 'fancy'
 
-" color column 80
-set cc=80
+set confirm
+
+set visualbell
+
+set t_vb=
+
+set mouse=a
+
+set cmdheight=2
+
+set number
+
+set notimeout ttimeout ttimeoutlen=200
+
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+
+nnoremap <C-L> :nohl<CR><C-L>
