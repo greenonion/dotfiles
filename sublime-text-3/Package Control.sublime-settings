@@ -2,11 +2,15 @@
 	"installed_packages":
 	[
 		"Better CoffeeScript",
+		"BracketHighlighter",
+		"Enhanced Clojure",
+		"lispindent",
 		"RailsCasts Colour Scheme",
 		"Sass",
 		"SideBarEnhancements",
 		"SublimeLinter",
 		"SublimeLinter-rubocop",
+		"SublimeREPL",
 		"Theme - Soda",
 		"Tomorrow Color Schemes"
 	]
