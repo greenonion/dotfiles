@@ -1,0 +1,19 @@
+
+;; ----- smex-history -----
+(
+ load-file
+ eval-buffer
+ load-theme
+ cider-jack-in
+ cd
+ 5x5
+ arp
+)
+
+;; ----- smex-data -----
+(
+ (cider-jack-in . 2)
+ (load-theme . 1)
+ (eval-buffer . 1)
+ (load-file . 1)
+)

@@ -1,0 +1,82 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/Users/nikos/dvp/playground/liberator-tutorial/src/" . "liberator_tutorial/")
+ ("/Users/nikos/dvp/playground/liberator-tutorial/" . "src/")
+ ("/Users/" . "nikos/")
+ ("/" . "Users/")
+ ("/Users/nikos/dvp/playground/" . "liberator-tutorial/")
+ ("/Users/nikos/dvp/skroutz/honey/src/" . "honey/")
+ ("/Users/nikos/dvp/skroutz/honey/" . "test/")
+ ("/Users/nikos/dvp/skroutz/honey/test/" . "honey/")
+ ("/Users/nikos/dvp/skroutz/" . "honey/")
+ ("/Users/nikos/dvp/" . "skroutz/")
+ ("/Users/nikos/" . ".emacs.d/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/Users/nikos/.emacs.d/"
+ "/Users/nikos/"
+ "/Users/nikos/dvp/skroutz/honey/test/honey/"
+ "/Users/nikos/dvp/playground/liberator-tutorial/src/liberator_tutorial/"
+ "/Users/nikos/dvp/playground/liberator-tutorial/"
+ "/Users/nikos/dvp/skroutz/honey/src/honey/"
+ "/Users/nikos/.lein/"
+ "/Users/nikos/dvp/skroutz/honey/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "init.el"
+ ".bash_profile"
+ "t_routes.clj"
+ "core.clj"
+ "project.clj"
+ "t_resources.clj"
+ "queries.clj"
+ "handlers.clj"
+ "t_queries.clj"
+ "t_core.clj"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/Users/nikos/.emacs.d/" (21655 61006 0 0) "themes/" "README.md" "projectile-bookmarks.eld" "places" "init.el" "ido.last" "elpa/" "customizations/" "cider-history" "backups/" "auto-save-list/" ".smex-items" ".recentf" "../" "./")
+
+ ("/Users/nikos/" (21655 60770 0 0) "tmp/" "Public/" "Pictures/" "Music/" "Movies/" "Library/" "git-prompt.sh" "git-completion.bash" "dvp/" "Dropbox/" "Downloads/" "Documents/" "Desktop/" "Applications/" ".vimrc" ".viminfo" ".Trash/" ".subversion/" ".ssh/" ".rbenv/" ".pry_history" ".npm/" ".node-gyp/" ".mysql_history" ".m2/" ".lein/" ".keepassx/" ".gitconfig" ".git-prompt-colors.sh" ".gemrc" ".gem/" ".emacs.d/" ".DS_Store" ".dropbox/" ".CFUserTextEncoding" ".bundle/" ".bash_profile" ".bash_history" ".aleka" "../" "./")
+
+ ("/home/" (21655 56430 537404 0) "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/honey/" (21652 6627 0 0) "test/" "target/" "src/" "README.md" "project.clj" "profiles.clj.sample" ".lein-env" ".gitignore" ".git/" "../" "./")
+
+ ("/Users/nikos/dvp/playground/liberator-tutorial/src/liberator_tutorial/" (21652 8730 0 0) "core.clj" "../" "./")
+
+ ("/Users/nikos/dvp/playground/liberator-tutorial/src/" (21652 8730 0 0) "liberator_tutorial/" "../" "./")
+
+ ("/Users/nikos/dvp/playground/liberator-tutorial/" (21652 8801 0 0) "test/" "src/" "resources/" "README.md" "project.clj" "LICENSE" "doc/" ".gitignore" "../" "./")
+
+ ("/Users/nikos/dvp/playground/" (21652 8730 0 0) "liberator-tutorial/" "acha/" "../" "./")
+
+ ("/Users/" (21641 46869 0 0) "Shared/" "nikos/" ".localized" "../" "./")
+
+ ("/Users/nikos/dvp/playground/acha/" (21647 63352 0 0) "acha-uber-0.2.3.jar" ".acha/" "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/honey/src/honey/" (21652 1163 0 0) "routes.clj" "resources.clj" "queries.clj" "handlers.clj" "core.clj" "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/honey/src/" (21648 11835 0 0) "honey/" "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/honey/test/honey/" (21652 1163 0 0) "t_routes.clj" "t_resources.clj" "t_queries.clj" "t_handlers.clj" "t_core.clj" "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/honey/test/" (21648 11835 0 0) "honey/" "../" "./")
+
+ ("/Users/nikos/.lein/" (21649 19631 0 0) "repl-history" "profiles.clj" "../" "./")
+
+ ("/Users/nikos/dvp/skroutz/" (21648 11834 0 0) "yogurt/" "skroutz-js-private/" "skroutz-deref/" "scratch-forwarder/" "machine-learning/" "insights-kibana3/" "honey/" "ddocs/" "core_search/" "clj-naive-bayes/" "../" "./")
+
+ ("/Users/nikos/dvp/" (21647 63300 0 0) "skroutz/" "playground/" "dotfiles/" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

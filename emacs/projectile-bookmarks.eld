@@ -1,0 +1,1 @@
+("~/dvp/skroutz/yogurt/" "~/dvp/skroutz/clj-naive-bayes/" "~/.emacs.d/" "~/dvp/skroutz/honey/" "~/dvp/playground/liberator-tutorial/")
