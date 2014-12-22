@@ -9,5 +9,6 @@
 	last = log -1 HEAD
 	ci = commit
 	co = checkout
+	g = grep
 [push]
 	default = simple
