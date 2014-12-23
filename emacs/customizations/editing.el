@@ -69,4 +69,6 @@
       (ns-get-selection-internal 'CLIPBOARD)
     (quit nil)))
 
-(setq electric-indent-mode nil)
+;; turns auto-indentation off. WHY?
+;; (setq electric-indent-mode nil)
+
