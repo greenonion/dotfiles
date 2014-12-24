@@ -6,10 +6,11 @@
 (require 'package)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+;; (add-to-list 'package-archives
+;;              '("tromey" . "http://tromey.com/elpa/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 ;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 ;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -69,7 +70,10 @@
     magit
 
     ;; fill column indicator
-    fill-column-indicator))
+    fill-column-indicator
+
+    ;; web mode (html/css etc)
+    web-mode))
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -134,6 +138,7 @@
 (load "setup-clojure.el")
 (load "setup-js.el")
 (load "setup-ruby.el")
+(load "setup-web.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -143,7 +148,8 @@
  '(coffee-tab-width 2)
  '(custom-safe-themes
    (quote
-    ("9fd20670758db15cc4d0b4442a74543888d2e445646b25f2755c65dcd6f1504b" "5ee12d8250b0952deefc88814cf0672327d7ee70b16344372db9460e9a0e3ffc" "7f1263c969f04a8e58f9441f4ba4d7fb1302243355cb9faecb55aec878a06ee9" "52588047a0fe3727e3cd8a90e76d7f078c9bd62c0b246324e557dfa5112e0d0c" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" default))))
+    ("9fd20670758db15cc4d0b4442a74543888d2e445646b25f2755c65dcd6f1504b" "5ee12d8250b0952deefc88814cf0672327d7ee70b16344372db9460e9a0e3ffc" "7f1263c969f04a8e58f9441f4ba4d7fb1302243355cb9faecb55aec878a06ee9" "52588047a0fe3727e3cd8a90e76d7f078c9bd62c0b246324e557dfa5112e0d0c" "1157a4055504672be1df1232bed784ba575c60ab44d8e6c7b3800ae76b42f8bd" default)))
+ '(safe-local-variable-values (quote ((encoding . utf-8) (asterisk . *)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
