@@ -1,7 +1,7 @@
 eval "$(rbenv init -)"
 
 alias ls="ls -G"
-alias ll="ls -la"
+alias ll="ls -lah"
 alias la="ls -A"
 
 # Enable git auto-completion
@@ -25,7 +25,7 @@ export LANG=en_US.UTF-8
 alias e='emacsclient -n'
 alias ec='emacsclient -c -n'
 
-export EDITOR='emacsclient -n'
+export EDITOR='emacsclient -c'
 
 # ruby/rails specifics
 alias be='bundle exec'
