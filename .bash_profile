@@ -3,6 +3,7 @@ eval "$(rbenv init -)"
 alias ls="ls -G"
 alias ll="ls -lah"
 alias la="ls -A"
+alias l="ll"
 
 # Enable git auto-completion
 source ~/git-completion.bash
@@ -16,6 +17,10 @@ export PS1='\[\e[32m\]\u@\h:\w\[\e[0m\]$(__git_ps1 " [%s]")\$ '
 
 # enable bash 4 goodies
 shopt -s globstar autocd
+
+# bind history completion to arrow keys
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
 
 # specify locale
 export LC_ALL=en_US.UTF-8
