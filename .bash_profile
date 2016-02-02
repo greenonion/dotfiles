@@ -1,9 +1,39 @@
 eval "$(rbenv init -)"
 
-alias ls="ls -G"
-alias ll="ls -lah"
-alias la="ls -A"
-alias l="ll"
+# Aliases
+# various ls helpers
+alias ls='ls -GF'
+alias l.='ls -d .*'
+alias ll='ls -lh'
+alias l='ls -lh'
+alias la='ls -alh'
+alias lr='ls -lR'
+# colorize greps
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+# make less a little more sane
+alias less='less -RX'
+# time helpers
+alias epoch='date +%s'
+alias dt='gdate "+%Y-%m-%dT%H:%M:%S.%3N%zZ"'
+
+# look up a process quickly
+function pg {
+    # doing it again afterwards for the coloration
+    ps aux | grep -F -i $1 | grep -F -v grep | grep -F -i $1
+}
+
+# Check if a URL is up
+function chk-url() {
+    curl -sL -w "%{http_code} %{url_effective}\\n" "$1" -o /dev/null
+}
+
+# HTTP verbs
+alias get='curl -s -XGET'
+alias post='curl -s -XPOST'
+alias put='curl -s -XPUT'
+alias delete='curl -s -XDELETE'
 
 # Enable git auto-completion
 source ~/git-completion.bash
