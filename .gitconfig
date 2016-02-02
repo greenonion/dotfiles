@@ -19,3 +19,5 @@
 	insteadOf = skroutz:
 	insteadOf = deploy:
 	insteadOf = skroutz:
+[rebase]
+	autosquash = true
