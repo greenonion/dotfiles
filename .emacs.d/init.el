@@ -445,6 +445,14 @@ When using Homebrew, install it using \"brew install trash\"."
   (paredit-mode 1)
   (eldoc-mode 1))
 
+(defun my/component-reset ()
+  (interactive)
+  (save-buffer)
+  (set-buffer (cider-current-connection))
+  (goto-char (point-max))
+  (insert "(reset)")
+  (cider-repl-return))
+
 (use-package cider
   :defer 30
   :init
@@ -453,7 +461,10 @@ When using Homebrew, install it using \"brew install trash\"."
   (add-hook #'cider-mode-hook #'my/setup-clojure-hook)
   (add-hook #'cider-repl-mode-hook #'my/setup-clojure-hook)
   (add-hook #'cider-mode-hook #'company-mode)
-  (add-hook #'cider-repl-mode-hook #'company-mode))
+  (add-hook #'cider-repl-mode-hook #'company-mode)
+  (global-set-key (kbd "C-c r") 'my/component-reset)
+  :config
+  (setq cider-repl-display-help-banner nil))
 
 ;; Elisp
 ;; -----
