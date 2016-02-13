@@ -927,6 +927,17 @@ Deletes whitespace at join."
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
 
+;; Window switching
+(defun my/other-window-backwards ()
+  (interactive)
+  (other-window -1))
+
+(global-set-key (kbd "M-'") 'other-window)
+(global-set-key (kbd "M-\"") 'my/other-window-backwards)
+(global-set-key (kbd "H-'") 'other-window)
+(global-set-key [C-tab] 'other-window)
+(global-set-key [C-S-tab] 'my/other-window-backwards)
+
 ;; **************
 ;; Finalize Setup
 ;; **************
