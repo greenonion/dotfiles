@@ -433,8 +433,7 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (use-package clojure-mode
   :init
-  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook)
-  (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode))
+  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook))
 
 (defun my/setup-cider ()
   (interactive)
@@ -475,7 +474,6 @@ When using Homebrew, install it using \"brew install trash\"."
   (paredit-mode 1)
   (eldoc-mode 1))
 
-(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook #'my/turn-on-paredit-and-eldoc)
 (add-hook 'ielm-mode-hook #'my/turn-on-paredit-and-eldoc)
 
@@ -887,6 +885,15 @@ When using Homebrew, install it using \"brew install trash\"."
   (add-hook 'java-mode-hook #'idle-highlight-mode)
   (add-hook 'emacs-lisp-mode-hook #'idle-highlight-mode)
   (add-hook 'clojure-lisp-mode-hook #'idle-highlight-mode))
+
+;; rainbow-delimiters-mode
+;; -----------------------
+
+;; Use different colors per set of parenthesis. Only in lisps.
+(use-package rainbow-delimiters
+  :init
+  (add-hook #'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode))
 
 ;; *******************
 ;; Extra Functionality
