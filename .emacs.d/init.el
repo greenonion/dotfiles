@@ -37,7 +37,7 @@
     better-defaults
 
     ;; themeing
-    rainbow-mode monokai-theme smart-mode-line beacon
+    rainbow-mode monokai-theme smart-mode-line beacon rainbow-delimiters
 
     ;; misc
     diminish exec-path-from-shell symon
@@ -72,7 +72,7 @@
     elisp-slime-nav paredit
 
     ;; markup language
-    markdown-mode markdown-mode+ yaml-mode
+    markdown-mode markdown-mode+ yaml-mode web-mode
 
     ;; git
     magit git-gutter git-timemachine with-editor
@@ -433,7 +433,8 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (use-package clojure-mode
   :init
-  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook))
+  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook)
+  (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode))
 
 (defun my/setup-cider ()
   (interactive)
@@ -474,6 +475,7 @@ When using Homebrew, install it using \"brew install trash\"."
   (paredit-mode 1)
   (eldoc-mode 1))
 
+(add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook #'my/turn-on-paredit-and-eldoc)
 (add-hook 'ielm-mode-hook #'my/turn-on-paredit-and-eldoc)
 
