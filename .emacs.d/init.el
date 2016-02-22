@@ -394,6 +394,7 @@ When using Homebrew, install it using \"brew install trash\"."
         (tab-mark 9 [183 9] [92 9])))
 
 ;; always turn on whitespace mode in programming buffers
+(add-hook 'prog-mode-hook #'whitespace-mode)
 (add-hook 'whitespace-mode-hook (lambda () (diminish 'whitespace-mode)))
 ;; indicate trailing empty lines in the GUI
 (setq-default show-trailing-whitespace t)
@@ -948,6 +949,33 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key [remap move-beginning-of-line]
                 'smart-move-beginning-of-line)
 
+;; Cleaning a buffer
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(defvar bad-cleanup-modes '(python-mode yaml-mode)
+  "List of modes where `cleanup-buffer' should not be used")
+
+(defun cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer. If the
+buffer is one of the `bad-cleanup-modes' then only whitespace is stripped."
+  (interactive)
+  (unless (member major-mode bad-cleanup-modes)
+    (progn
+      (indent-buffer)
+      (untabify-buffer)))
+  (whitespace-cleanup))
+
+;; Perform general cleanup.
+(global-set-key (kbd "C-c n") #'cleanup-buffer)
+
+;; Clean whitespace after saving
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 ;; ************
 ;; Key Bindings
