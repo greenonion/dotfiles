@@ -44,7 +44,7 @@
 
     ;; for auto-complete
     company
-    
+
     ;; editing utilities
     smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
     fill-column-indicator anzu smart-tab shrink-whitespace undo-tree
@@ -52,19 +52,19 @@
 
     ;; highlighting
     idle-highlight-mode
-    
+
     ;; org-mode
     org
 
     ;; buffer utils
     dired+
-    
+
     ;; clojure
     clojure-mode clojure-mode-extra-font-locking cider paredit paren-face ac-cider
 
     ;; javascript
     json-mode js2-mode
-    
+
     ;; ruby
     ruby-mode inf-ruby rbenv robe-mode rspec-mode
 
@@ -380,7 +380,7 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; whitespace mode
 (setq whitespace-style '(tabs newline space-mark
                          tab-mark newline-mark
-                         face lines-tail))
+                         face lines-tail trailing))
 
 ;; display pretty things for newlines and tabs
 (setq whitespace-display-mappings
