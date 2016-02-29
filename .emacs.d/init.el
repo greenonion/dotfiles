@@ -48,7 +48,7 @@
     ;; editing utilities
     smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
     fill-column-indicator anzu smart-tab shrink-whitespace undo-tree
-    iedit smartscan ido-vertical-mode vlf
+    iedit smartscan ido-vertical-mode vlf imenu-anywhere
 
     ;; highlighting
     idle-highlight-mode
@@ -839,6 +839,12 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; Use it to edit every instance of a word in the buffer.
 (use-package iedit
   :bind ("C-;" . iedit-mode))
+
+;; imenu-anywhere
+;; --------------
+
+(use-package imenu-anywhere
+  :bind (("C-c i" . imenu-anywhere)))
 
 ;; beacon
 ;; ------
