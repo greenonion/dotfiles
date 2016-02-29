@@ -1016,6 +1016,32 @@ Deletes whitespace at join."
 (global-set-key [C-tab] 'other-window)
 (global-set-key [C-S-tab] 'my/other-window-backwards)
 
+;; Next two functions are borrowed from emacs prelude.
+
+(defun my/smart-open-line-above ()
+  "Insert an empty line above the current line.
+Position the cursor at it's beginning, according to the current mode."
+  (interactive)
+  (move-beginning-of-line nil)
+  (newline-and-indent)
+  (forward-line -1)
+  (indent-according-to-mode))
+
+(defun my/smart-open-line (arg)
+  "Insert an empty line after the current line.
+Position the cursor at its beginning, according to the current mode.
+
+With a prefix ARG open line above the current line."
+  (interactive "P")
+  (if arg
+      (my/prelude-smart-open-line-above)
+    (progn
+      (move-end-of-line nil)
+      (newline-and-indent))))
+
+(global-set-key (kbd "s-o") 'my/smart-open-line-above)
+(global-set-key (kbd "M-o") 'my/smart-open-line)
+
 ;; **************
 ;; Finalize Setup
 ;; **************
