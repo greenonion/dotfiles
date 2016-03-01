@@ -71,6 +71,9 @@
     ;; emacs-lisp
     elisp-slime-nav paredit
 
+    ;; elasticsearch
+    es-mode
+
     ;; markup language
     markdown-mode markdown-mode+ yaml-mode web-mode
 
@@ -517,6 +520,11 @@ When using Homebrew, install it using \"brew install trash\"."
 (bind-key "C-x C-e" 'sanityinc/eval-last-sexp-or-region emacs-lisp-mode-map)
 
 (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+;; Elasticsearch
+
+(use-package es-mode
+  :mode "\\.es$")
 
 ;; Ruby
 ;; ----
