@@ -156,6 +156,10 @@
 (setq-default indicate-empty-lines nil)
 (setq-default indicate-buffer-boundaries nil)
 
+;; don't blink, please
+(when (functionp 'blink-cursor-mode)
+  (blink-cursor-mode -1))
+
 ;; don't beep and dont show startup message
 (setq ring-bell-function (lambda ()))
 (setq inhibit-startup-screen t
