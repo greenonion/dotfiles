@@ -725,7 +725,13 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; magit
 ;; -----
 
-;; TODO
+(use-package magit
+  :init (add-hook 'magit-mode-hook 'hl-line-mode)
+  :config
+  (setenv "GIT_PAGER" "")
+  (if (file-exists-p  "/usr/local/bin/emacsclient")
+      (setq magit-emacsclient-executable "/usr/local/bin/emacsclient")
+    (setq magit-emacsclient-executable (executable-find "emacsclient"))))
 
 ;; git-gutter
 ;; ----------
