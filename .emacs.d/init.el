@@ -441,7 +441,21 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (use-package clojure-mode
   :init
-  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook))
+  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook)
+  :config
+  (define-clojure-indent
+    ;; Compojure routes
+    (defroutes 'defun)
+    (GET 2)
+    (POST 2)
+    (PUT 2)
+    (DELETE 2)
+    (HEAD 2)
+    (ANY 2)
+    (context 2)
+    ;; Midje
+    (facts 2)
+    (fact 2)))
 
 (defun my/setup-cider ()
   (interactive)
