@@ -726,6 +726,7 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; -----
 
 (use-package magit
+  :bind ("C-x g" . magit-status)
   :init (add-hook 'magit-mode-hook 'hl-line-mode)
   :config
   (setenv "GIT_PAGER" "")
