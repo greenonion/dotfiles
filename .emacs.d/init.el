@@ -50,6 +50,9 @@
     fill-column-indicator anzu smart-tab shrink-whitespace undo-tree
     iedit smartscan ido-vertical-mode vlf imenu-anywhere
 
+    ;; infrastructure
+    restclient
+
     ;; highlighting
     idle-highlight-mode
 
@@ -538,6 +541,12 @@ When using Homebrew, install it using \"brew install trash\"."
 (bind-key "C-x C-e" 'sanityinc/eval-last-sexp-or-region emacs-lisp-mode-map)
 
 (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+;; Rest Client
+;; -----------
+
+(use-package restclient
+  :mode ("\\.rest\\'" . restclient-mode))
 
 ;; Elasticsearch
 
