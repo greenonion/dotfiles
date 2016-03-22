@@ -69,7 +69,7 @@
     json-mode js2-mode
 
     ;; ruby
-    ruby-mode inf-ruby rbenv robe-mode rspec-mode
+    ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
 
     ;; emacs-lisp
     elisp-slime-nav paredit
@@ -389,8 +389,8 @@ When using Homebrew, install it using \"brew install trash\"."
 
 ;; whitespace mode
 (setq whitespace-style '(tabs newline space-mark
-                         tab-mark newline-mark
-                         face lines-tail trailing))
+                              tab-mark newline-mark
+                              face lines-tail trailing))
 
 ;; display pretty things for newlines and tabs
 (setq whitespace-display-mappings
@@ -491,6 +491,8 @@ When using Homebrew, install it using \"brew install trash\"."
   :config
   (setq cider-repl-display-help-banner nil))
 
+
+
 ;; Elisp
 ;; -----
 
@@ -548,6 +550,18 @@ When using Homebrew, install it using \"brew install trash\"."
 (use-package restclient
   :mode ("\\.rest\\'" . restclient-mode))
 
+;; Web Mode
+;; --------
+
+(use-package web-mode
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.erb\\'" . web-mode))
+  :config
+  (progn
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-markup-indent-offset 2)))
+
 ;; Elasticsearch
 
 (use-package es-mode
@@ -556,16 +570,53 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; Ruby
 ;; ----
 
+;; (add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.gemspec\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.ru\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Gemfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Guardfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Capfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cap\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.thor\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.rabl\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Thorfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Vagrantfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Podfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("\\.podspec\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Puppetfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Berksfile\\'" . ruby-mode))
+;; (add-to-list 'auto-mode-alist '("Appraisals\\'" . ruby-mode))
+
+(use-package ruby-mode
+  :mode (("\\.rake\\'" . ruby-mode)
+         ("Rakefile\\'" . ruby-mode)
+         ("\\.gemspec\\'" . ruby-mode)
+         ("\\.ru\\'" . ruby-mode)
+         ("Gemfile\\'" . ruby-mode)
+         ("Guardfile\\'" . ruby-mode)
+         ("Capfile\\'" . ruby-mode)
+         ("\\.cap\\'" . ruby-mode))
+  :init
+  (progn
+    (add-hook 'ruby-mode-hook 'robe-mode)
+    (add-hook 'ruby-mode-hook 'ruby-tools-mode))
+  :config
+  (progn
+    (inf-ruby-minor-mode +1)
+    (setq ruby-insert-encoding-magic-comment nil)))
+
 (use-package rbenv
   :defer 25
   :init
   ;; I don't really care about the active Ruby in the modeline
-  (setq rbenv-show-active-ruby-in-modeline nil)
-  (global-rbenv-mode t))
+  (progn
+    (setq rbenv-show-active-ruby-in-modeline nil)
+    (global-rbenv-mode t)))
 
-(use-package robe
-  :init
-  (add-hook 'ruby-mode-hook 'robe-mode))
+(defadvice inf-ruby-console-auto (before activate-rbenv-for-robe activate)
+  (rbenv-use-corresponding))
 
 (use-package rspec-mode
   :defer 20
@@ -806,7 +857,8 @@ When using Homebrew, install it using \"brew install trash\"."
                ("C-n" . company-select-next)
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
-               ("<tab>" . company-complete))))
+               ("<tab>" . company-complete))
+    (push 'company-robe company-backends)))
 
 ;; smart-tab
 ;; ---------
