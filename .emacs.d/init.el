@@ -598,13 +598,15 @@ When using Homebrew, install it using \"brew install trash\"."
          ("Guardfile\\'" . ruby-mode)
          ("Capfile\\'" . ruby-mode)
          ("\\.cap\\'" . ruby-mode))
-  :init
-  (progn
-    (add-hook 'ruby-mode-hook 'ruby-tools-mode))
   :config
   (progn
     (inf-ruby-minor-mode +1)
     (setq ruby-insert-encoding-magic-comment nil)))
+
+(use-package ruby-tools
+  :init
+  (add-hook 'ruby-mode-hook 'ruby-tools-mode)
+  :diminish "")
 
 (use-package rbenv
   :defer 25
@@ -619,6 +621,7 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (use-package rspec-mode
   :defer 20
+  :diminish rspec-mode
   :commands rspec-mode)
 
 (use-package inf-ruby
@@ -628,6 +631,7 @@ When using Homebrew, install it using \"brew install trash\"."
 (use-package robe
   :init
   (add-hook 'ruby-mode-hook 'robe-mode)
+  :diminish ""
   :config
   (eval-after-load 'company
     '(push 'company-robe company-backends)))
