@@ -600,7 +600,6 @@ When using Homebrew, install it using \"brew install trash\"."
          ("\\.cap\\'" . ruby-mode))
   :init
   (progn
-    (add-hook 'ruby-mode-hook 'robe-mode)
     (add-hook 'ruby-mode-hook 'ruby-tools-mode))
   :config
   (progn
@@ -621,6 +620,17 @@ When using Homebrew, install it using \"brew install trash\"."
 (use-package rspec-mode
   :defer 20
   :commands rspec-mode)
+
+(use-package inf-ruby
+  :init
+  (add-hook 'after-init-hook 'inf-ruby-switch-setup))
+
+(use-package robe
+  :init
+  (add-hook 'ruby-mode-hook 'robe-mode)
+  :config
+  (eval-after-load 'company
+    '(push 'company-robe company-backends)))
 
 ;; Javascript
 ;; ----------
@@ -857,8 +867,7 @@ When using Homebrew, install it using \"brew install trash\"."
                ("C-n" . company-select-next)
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
-               ("<tab>" . company-complete))
-    (push 'company-robe company-backends)))
+               ("<tab>" . company-complete))))
 
 ;; smart-tab
 ;; ---------
