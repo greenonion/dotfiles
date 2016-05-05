@@ -114,7 +114,8 @@
     (setq exec-path-from-shell-variables '("JAVA_HOME"
                                            "PATH"
                                            "WORKON_HOME"
-                                           "MANPATH"))
+                                           "MANPATH"
+                                           "LANG"))
     (exec-path-from-shell-initialize)))
 
 ;; Basics and settings used everywhere
@@ -124,9 +125,11 @@
       user-mail-address "nikos.fertakis@gmail.com")
 
 ;; prefer UTF-8 everywhere
-(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
 ;; turn on syntax highlighting for all buffers
@@ -663,6 +666,7 @@ When using Homebrew, install it using \"brew install trash\"."
   (interactive)
   (when (eq system-type 'darwin)
     (set-fontset-font "fontset-default" 'symbol "Monaco")
+    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
     ;; (set-default-font "Bitstream Vera Sans Mono")
     ;; (set-default-font "Fantasque Sans Mono")
     (set-default-font "Fira Mono")
