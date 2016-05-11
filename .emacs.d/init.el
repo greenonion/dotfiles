@@ -43,7 +43,7 @@
     diminish exec-path-from-shell symon
 
     ;; for auto-complete
-    company
+    company popup
 
     ;; editing utilities
     smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
@@ -61,6 +61,9 @@
 
     ;; buffer utils
     dired+
+
+    ;; flycheck
+    flycheck flycheck-tip flycheck-pos-tip
 
     ;; clojure
     clojure-mode clojure-mode-extra-font-locking cider paredit paren-face ac-cider
@@ -789,7 +792,18 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; flycheck
 ;; --------
 
-;; TODO
+(use-package flycheck
+  :defer 5
+  :bind (("M-g M-n" . flycheck-next-error)
+         ("M-g M-p" . flycheck-previous-error)
+         ("M-g M-=" . flycheck-list-errors))
+  :init (global-flycheck-mode)
+  :diminish flycheck-mode
+  :config
+  (progn
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+    (use-package flycheck-pos-tip
+      :init (flycheck-pos-tip-mode))))
 
 ;; with-editor
 ;; -----------
