@@ -37,7 +37,8 @@
     better-defaults
 
     ;; themeing
-    rainbow-mode monokai-theme smart-mode-line beacon rainbow-delimiters
+    rainbow-mode color-theme-sanityinc-tomorrow smart-mode-line
+    beacon rainbow-delimiters
 
     ;; misc
     diminish exec-path-from-shell symon
@@ -47,7 +48,7 @@
 
     ;; editing utilities
     smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
-    fill-column-indicator anzu smart-tab shrink-whitespace undo-tree
+    fill-column-indicator anzu smart-tab smartparens shrink-whitespace undo-tree
     iedit smartscan ido-vertical-mode vlf imenu-anywhere
 
     ;; infrastructure
@@ -659,8 +660,8 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (setq ns-use-srgb-colorspace t)
 
-(use-package monokai-theme
-  :init (load-theme 'monokai t))
+(use-package color-theme-sanityinc-tomorrow
+  :init (load-theme 'sanityinc-tomorrow-eighties t))
 
 ;; Fonts
 ;; -----
@@ -672,8 +673,8 @@ When using Homebrew, install it using \"brew install trash\"."
     (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
     ;; (set-default-font "Bitstream Vera Sans Mono")
     ;; (set-default-font "Fantasque Sans Mono")
-    (set-default-font "Fira Mono")
-    ;;(set-default-font "Source Code Pro")
+    ;; (set-default-font "Fira Mono")
+    ;; (set-default-font "Source Code Pro")
     (set-face-attribute 'default nil :height 140 :weight 'normal)
     (set-face-attribute 'fixed-pitch nil :height 140 :weight 'normal)
 
@@ -788,6 +789,10 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; -----------
 
 ;; TODO
+(use-package smartparens
+  :disabled t
+  :defer 5
+  :diminish smartparens-mode)
 
 ;; flycheck
 ;; --------
