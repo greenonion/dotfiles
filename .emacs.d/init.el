@@ -939,7 +939,8 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (use-package ido
   :config
-  (use-package ido-ubiquitous)
+  (use-package ido-ubiquitous
+    :init (ido-ubiquitous-mode 1))
   (use-package flx-ido
     :init (flx-ido-mode 1)
     :config (setq ido-use-faces nil))
