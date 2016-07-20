@@ -58,7 +58,7 @@
     idle-highlight-mode
 
     ;; org-mode
-    org
+    org org-bullets
 
     ;; buffer utils
     dired+
@@ -386,7 +386,44 @@ When using Homebrew, install it using \"brew install trash\"."
     (add-to-list 'tramp-remote-path "/opt/java/current/bin")
     (add-to-list 'tramp-remote-path "~/bin")))
 
-;; saveplace
+;; Spell check and flyspell settings
+;; ---------------------------------
+
+;; Standard location of personal dictionary
+(setq ispell-personal-dictionary "~/.flydict")
+
+;; Taken from dakrone who took it mostly from
+;; http://blog.binchen.org/posts/what-s-the-best-spell-check-set-up-in-emacs.html
+(when (executable-find "aspell")
+  (setq ispell-program-name (executable-find "aspell"))
+  (setq ispell-extra-args
+        (list "--sug-mode=fast" ;; ultra/fast/normal/bad-spellers
+              "--lang=en_GB" ;; TODO: can this be toggled for Greek?
+              "--ignore=4")))
+
+;; hunspell
+(when (executable-find "hunspell")
+  (setq ispell-program-name (executable-find "hunspell"))
+  (setq ispell-extra-args '("-d en_GB")))
+
+;; blindly copy-pasting here:
+(add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
+(add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+(add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+(add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+
+(defun my/enable-flyspell-prog-mode ()
+  (interactive)
+  (flyspell-prog-mode))
+
+(use-package flyspell
+  :defer t
+  :diminish ""
+  :init (add-hook 'prog-mode-hook #'my/enable-flyspell-prog-mode))
+
+;; Saveplace
+;; ---------
+
 ;; navigates to where you left off
 (use-package saveplace
   :defer t
@@ -653,6 +690,19 @@ When using Homebrew, install it using \"brew install trash\"."
   :config
   (js2-imenu-extras-setup)
   (setq-default js-auto-indent-flag nil))
+
+;; Org-mode
+;; --------
+
+(use-package org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c b" . org-iswitchb)))
+
+;; org-bullets
+(use-package org-bullets
+  :init
+  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; *****
 ;; Theme
