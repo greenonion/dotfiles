@@ -49,7 +49,7 @@
     ;; editing utilities
     smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
     fill-column-indicator anzu smart-tab smartparens shrink-whitespace undo-tree
-    iedit smartscan ido-vertical-mode vlf imenu-anywhere
+    iedit smartscan ido-vertical-mode vlf imenu-anywhere projectile
 
     ;; infrastructure
     restclient
@@ -83,6 +83,9 @@
 
     ;; markup language
     markdown-mode markdown-mode+ yaml-mode web-mode
+
+    ;; helm
+    helm helm-projectile helm-ag
 
     ;; git
     magit git-gutter git-timemachine with-editor
@@ -881,6 +884,35 @@ When using Homebrew, install it using \"brew install trash\"."
       (setq magit-emacsclient-executable "/usr/local/bin/emacsclient")
     (setq magit-emacsclient-executable (executable-find "emacsclient"))))
 
+;; projectile
+;; ----------
+
+(use-package projectile
+  :defer 5
+  :commands projectile-global-mode
+  :diminish projectile-mode
+  :config
+  (bind-key "C-c p b" #'projectile-switch-to-buffer #'projectile-command-map)
+  (bind-key "C-c p K" #'projectile-kill-buffers #'projectile-command-map)
+
+  ;; global ignores
+  (add-to-list 'projectile-globally-ignored-files ".tern-port")
+  (add-to-list 'projectile-globally-ignored-files "GTAGS")
+  (add-to-list 'projectile-globally-ignored-files "GPATH")
+  (add-to-list 'projectile-globally-ignored-files "GRTAGS")
+  (add-to-list 'projectile-globally-ignored-files "GSYMS")
+  (add-to-list 'projectile-globally-ignored-files ".DS_Store")
+  ;; always ignore .class files
+  (add-to-list 'projectile-globally-ignored-file-suffixes ".class")
+  (use-package helm-projectile
+    :init
+    (use-package grep) ;; required for helm-ag to work properly
+    (setq projectile-completion-system 'helm)
+    ;; no fuzziness for projectile-helm
+    (setq helm-projectile-fuzzy-match nil)
+    (helm-projectile-on))
+  (projectile-global-mode))
+
 ;; git-gutter
 ;; ----------
 
@@ -911,6 +943,43 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (add-hook 'prog-mode-hook #'anzu-mode)
 (add-hook 'org-mode-hook #'anzu-mode)
+
+;; helm
+;; ----
+
+(use-package helm-config
+  :demand t
+  :diminish helm-mode
+  :bind
+  (("C-x C-f" . helm-find-files)
+   ("C-x C-i" . helm-semantic-or-imenu)
+   ("M-x" . helm-M-x)
+   ("C-x b" . helm-mini))
+  :config
+  (use-package helm-mode
+    :diminish helm-mode
+    :init (helm-mode 1))
+  (use-package helm-imenu)
+  (use-package helm-projectile
+    :bind (("C-x f" . helm-projectile)
+           ("C-c p f" . helm-projectile-find-file)
+           ("C-c p s" . helm-projectile-switch-project)))
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+  (setq ;; open helm buffer inside current window, don't occupy whole other window
+        helm-split-window-in-side-p t
+        ;; move to end or beginning of source when reaching top or bottom
+        ;; of source
+        helm-move-to-line-cycle-in-source t
+        helm-M-x-fuzzy-match t
+        helm-imenu-fuzzy-match t)
+
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t)))
 
 ;; markdown-mode
 ;; -------------
@@ -1011,6 +1080,7 @@ When using Homebrew, install it using \"brew install trash\"."
 
 ;; TODO maybe try helm someday?
 (use-package smex
+  :disabled t
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)))
 
@@ -1025,6 +1095,7 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; --------------
 
 (use-package imenu-anywhere
+  :disabled t
   :bind (("C-c i" . imenu-anywhere)))
 
 ;; beacon
