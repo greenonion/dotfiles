@@ -88,7 +88,7 @@
     markdown-mode markdown-mode+ yaml-mode web-mode
 
     ;; helm
-    helm helm-projectile helm-ag
+    helm helm-projectile helm-ag helm-swoop helm-flx
 
     ;; git
     magit git-gutter git-timemachine with-editor
@@ -306,6 +306,12 @@
       ;;   "openssl s_client -connect %h:%p -no_ssl2 -ign_eof")
       '("gnutls-cli -p %p %h"
         "openssl s_client -connect %h:%p -no_ssl2 -no_ssl3 -ign_eof"))
+
+(use-package helm-flx
+  :init (helm-flx-mode +1))
+
+;; OS-specific settings
+;; --------------------
 
 (when (eq system-type 'darwin)
   (setq ns-use-native-fullscreen nil)
@@ -955,6 +961,27 @@ When using Homebrew, install it using \"brew install trash\"."
 (add-hook 'prog-mode-hook #'anzu-mode)
 (add-hook 'org-mode-hook #'anzu-mode)
 
+;; helm-swoop
+;; ----------
+
+(use-package helm-swoop
+  :bind (("M-i" . helm-swoop)
+         ("M-I" . helm-swoop-back-to-last-point)
+         ("C-c M-i" . helm-multi-swoop))
+  :config
+  ;; When doing isearch, hand the word over to helm-swoop
+  (define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+  ;; From helm-swoop to helm-multi-swoop-all
+  (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+  ;; Save buffer when helm-multi-swoop-edit complete
+  (setq helm-multi-swoop-edit-save t
+        ;; If this value is t, split window inside the current window
+        helm-swoop-split-with-multiple-windows t
+        ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+        helm-swoop-split-direction 'split-window-vertically
+        ;; If nil, you can slightly boost invoke speed in exchange for text color
+        helm-swoop-speed-or-color nil))
+
 ;; helm
 ;; ----
 
@@ -971,19 +998,31 @@ When using Homebrew, install it using \"brew install trash\"."
     :diminish helm-mode
     :init (helm-mode 1))
   (use-package helm-imenu)
+  (use-package helm-semantic)
   (use-package helm-projectile
     :bind (("C-x f" . helm-projectile)
            ("C-c p f" . helm-projectile-find-file)
            ("C-c p s" . helm-projectile-switch-project)))
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
-  (setq ;; open helm buffer inside current window, don't occupy whole other window
-        helm-split-window-in-side-p t
-        ;; move to end or beginning of source when reaching top or bottom
-        ;; of source
-        helm-move-to-line-cycle-in-source t
-        helm-M-x-fuzzy-match t
-        helm-imenu-fuzzy-match t)
+  (setq
+   ;; truncate long lines in helm completion
+   helm-truncate-lines t
+   ;; do not display invisible candidates
+   helm-quick-update t
+   ;; open helm buffer inside current window, don't occupy whole other window
+   helm-split-window-in-side-p t
+   ;; move to end or beginning of source when reaching top or bottom
+   ;; of source
+   helm-move-to-line-cycle-in-source t
+   ;; fuzzy matching
+   helm-recentf-fuzzy-match t
+   helm-locate-fuzzy-match nil ;; locate fuzzy is worthless
+   helm-M-x-fuzzy-match t
+   helm-buffers-fuzzy-matching t
+   helm-semantic-fuzzy-match t
+   helm-imenu-fuzzy-match t
+   helm-completion-in-region-fuzzy-match t)
 
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to do persistent action
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
