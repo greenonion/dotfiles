@@ -617,14 +617,22 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; Web Mode
 ;; --------
 
+(defun my/web-mode-hook ()
+  ;; Disable fill column indicator mode due to a bug.
+  ;; See: https://github.com/alpaker/Fill-Column-Indicator/issues/46
+  (turn-off-fci-mode)
+  ;; HTML offset indentation
+  (setq web-mode-markup-indent-offset 2)
+  ;; CSS offset indentation
+  (setq web-mode-css-indent-offset 2)
+  ;; Script/code offset indentation
+  (setq web-mode-code-indent-offset 2))
+
 (use-package web-mode
-  :mode (("\\.html?\\'" . web-mode)
-         ("\\.erb\\'" . web-mode))
-  :config
-  (progn
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-markup-indent-offset 2)))
+  :mode (("\\.erb\\'" . web-mode)
+         ("\\.html?\\'" . web-mode)
+         ("\\.hbs\\'" . web-mode))
+  :init (add-hook 'web-mode-hook  'my/web-mode-hook))
 
 ;; Elasticsearch
 
