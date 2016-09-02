@@ -1043,9 +1043,9 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; -------------
 
 (use-package markdown-mode
-  :load-path "site-lisp/markdown-mode"
   :init (add-hook 'markdown-mode-hook #'whitespace-mode)
-  :mode (("\\`README\\.md\\'" . gfm-mode)
+  :commands (markdown-mode gfm-mode)
+  :mode (("\\README\\.md\\'" . gfm-mode)
          ("github\\.com.*\\.txt\\'" . gfm-mode)
          ("\\.md\\'"          . markdown-mode)
          ("\\.markdown\\'"    . markdown-mode)))
