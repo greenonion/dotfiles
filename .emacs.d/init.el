@@ -88,7 +88,7 @@
     markdown-mode markdown-mode+ yaml-mode web-mode
 
     ;; helm
-    helm helm-projectile helm-ag helm-swoop helm-flx
+    helm helm-projectile helm-ag helm-swoop helm-flx helm-flycheck
 
     ;; git
     magit git-gutter git-timemachine with-editor
@@ -886,7 +886,9 @@ When using Homebrew, install it using \"brew install trash\"."
   (progn
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
     (use-package flycheck-pos-tip
-      :init (flycheck-pos-tip-mode))))
+      :init (flycheck-pos-tip-mode))
+    (use-package helm-flycheck
+      :init (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))))
 
 ;; with-editor
 ;; -----------
@@ -1002,17 +1004,34 @@ When using Homebrew, install it using \"brew install trash\"."
    ("M-x" . helm-M-x)
    ("C-x b" . helm-mini))
   :config
+  (use-package helm-files
+    :config (setq helm-ff-file-compressed-list '("gz" "bz2" "zip" "tgz" "xz" "txz")))
+  (use-package helm-buffers)
   (use-package helm-mode
     :diminish helm-mode
     :init (helm-mode 1))
+  (use-package helm-misc)
   (use-package helm-imenu)
   (use-package helm-semantic)
+  (use-package helm-ring)
   (use-package helm-projectile
     :bind (("C-x f" . helm-projectile)
            ("C-c p f" . helm-projectile-find-file)
            ("C-c p s" . helm-projectile-switch-project)))
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
+
+  ;; Via: https://www.reddit.com/r/emacs/comments/3asbyn/new_and_very_useful_helm_feature_enter_search/
+  (setq helm-echo-input-in-header-line t)
+  (defun helm-hide-minibuffer-maybe ()
+    (when (with-helm-buffer helm-echo-input-in-header-line)
+      (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+        (overlay-put ov 'window (selected-window))
+        (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
+                                `(:background ,bg-color :foreground ,bg-color)))
+        (setq-local cursor-type nil))))
+  (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+
   (setq
    ;; truncate long lines in helm completion
    helm-truncate-lines t
@@ -1037,7 +1056,14 @@ When using Homebrew, install it using \"brew install trash\"."
   (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
   (when (executable-find "curl")
-    (setq helm-google-suggest-use-curl-p t)))
+    (setq helm-google-suggest-use-curl-p t))
+
+  ;; ggrep is gnu grep on OSX
+  (when (executable-find "ggrep")
+    (setq helm-grep-default-command
+          "ggrep -a -d skip %e -n%cH -e %p %f"
+          helm-grep-default-recurse-command
+          "ggrep -a -d recurse %e -n%cH -e %p %f")))
 
 ;; markdown-mode
 ;; -------------
