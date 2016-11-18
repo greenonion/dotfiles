@@ -370,6 +370,18 @@ When using Homebrew, install it using \"brew install trash\"."
 ;; use cat for shell pager
 (setenv "PAGER" "cat")
 
+(custom-set-variables
+ '(comint-scroll-to-bottom-on-input t)  ; always insert at the bottom
+ '(comint-scroll-to-bottom-on-output nil) ; always add output at the bottom
+ '(comint-scroll-show-maximum-output t) ; scroll to show max possible output
+ ;; '(comint-completion-autolist t)     ; show completion list when ambiguous
+ '(comint-input-ignoredups t)           ; no duplicates in command history
+ '(comint-completion-addsuffix t)       ; insert space/slash after file completion
+ '(comint-prompt-read-only nil)         ; if this is t, it breaks shell-command
+ '(comint-get-old-input (lambda () ""))      ; what to run when i press enter on a
+                                        ; line above the current prompt
+ )
+
 ;; Tramp settings
 (use-package tramp
   :defer 5
@@ -1000,6 +1012,7 @@ When using Homebrew, install it using \"brew install trash\"."
   :diminish helm-mode
   :bind
   (("C-x C-f" . helm-find-files)
+   ("M-y" . helm-show-kill-ring)
    ("C-x C-i" . helm-semantic-or-imenu)
    ("M-x" . helm-M-x)
    ("C-x b" . helm-mini))
