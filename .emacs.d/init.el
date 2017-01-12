@@ -1,5 +1,4 @@
-;; My first custom init.el file.
-;; Heavily inspired by dakrone's.
+;; Credits to dakrone for the inspiration.
 ;;
 ;; Turn on debugging
 (setq debug-on-error t)
@@ -289,7 +288,8 @@
  ;; don't display info about mail
  display-time-mail-function (lambda () nil)
  ;; update every 15 seconds (default is 60)
- display-time-interval 15)
+ display-time-interval 15
+ display-time-format "%d-%m-%Y %R")
 (display-time-mode 1)
 
 ;; quit as fast as possible
