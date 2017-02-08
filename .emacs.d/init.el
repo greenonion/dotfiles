@@ -540,11 +540,8 @@ When using Homebrew, install it using \"brew install trash\"."
 
 (defun my/component-reset ()
   (interactive)
-  (save-buffer)
-  (set-buffer (cider-current-connection))
-  (goto-char (point-max))
-  (insert "(reset)")
-  (cider-repl-return))
+  (save-some-buffers)
+  (cider-interactive-eval "(reloaded.repl/reset)"))
 
 (use-package cider
   :defer 30
