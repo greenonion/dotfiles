@@ -541,7 +541,7 @@ When using Homebrew, install it using \"brew install trash\"."
 (defun my/component-reset ()
   (interactive)
   (save-some-buffers)
-  (cider-interactive-eval "(reloaded.repl/reset)"))
+  (cider-interactive-eval "(reset)"))
 
 (use-package cider
   :defer 30
