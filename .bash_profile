@@ -1,5 +1,10 @@
 eval "$(rbenv init -)"
 
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
 # Aliases
 # various ls helpers
 alias ls='ls -GF'
