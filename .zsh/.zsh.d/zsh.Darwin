@@ -24,7 +24,7 @@ export EDITOR="emacsclient -c"
 export ALTERNATIVE_EDITOR="TERM=xterm-256color PATH=$EMACS_HOME/bin:$PATH $EMACS_HOME/Emacs -nw"
 
 # Remove ctrl+y from the keybinds for delayed suspend
-stty dsusp undef
+# stty dsusp undef
 
 alias gps="ps -c -r -ax -o command,pid,pcpu,time | sed 's/\(PID *\)%/\1 %/' | head -n 11 && echo && ps -c -m -ax -o command,pid,pmem,rss=RSIZE | sed 's/\(.\{23\}\)/\1 /' | head -n 9"
 
