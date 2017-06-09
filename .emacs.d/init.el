@@ -920,6 +920,13 @@ comint-replace-by-expanded-history-before-point."
   :diminish rspec-mode
   :commands rspec-mode)
 
+(defadvice rspec-compile (around rspec-compile-around)
+  "Use BASH shell for running the specs because of ZSH issues."
+  (let ((shell-file-name "/bin/bash"))
+    ad-do-it))
+
+(ad-activate 'rspec-compile)
+
 (use-package inf-ruby
   :init
   (add-hook 'after-init-hook 'inf-ruby-switch-setup))
