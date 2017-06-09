@@ -94,6 +94,9 @@
 
     ;; eshell
     eshell-prompt-extras
+
+    ;; docker
+    dockerfile-mode
     ))
 
 (defvar packages-refreshed? nil)
@@ -584,11 +587,16 @@ comint-replace-by-expanded-history-before-point."
 (global-set-key (kbd "M-3") 'my/create-or-switch-to-eshell-3)
 (global-set-key (kbd "M-4") 'my/create-or-switch-to-eshell-4)
 
+;; Docker mode
+;; -----------
+
+(use-package dockerfile-mode
+  :mode (("Dockerfile\\'" . dockerfile-mode)))
+
 ;; Tramp settings
 (use-package tramp
   :defer 5
   :config
-  (setq )
   ;; Turn of auto-save for tramp files
   (defun tramp-set-auto-save ()
     (auto-save-mode -1))
