@@ -984,8 +984,8 @@ comint-replace-by-expanded-history-before-point."
     ;; (set-default-font "Fantasque Sans Mono")
     ;; (set-default-font "Fira Mono")
     ;; (set-default-font "Source Code Pro")
-    (set-face-attribute 'default nil :height 140 :weight 'normal)
-    (set-face-attribute 'fixed-pitch nil :height 140 :weight 'normal)
+    (set-face-attribute 'default nil :height 120 :weight 'normal)
+    (set-face-attribute 'fixed-pitch nil :height 120 :weight 'normal)
 
     ;; Anti-aliasing
     (setq mac-allow-anti-aliasing t)))
