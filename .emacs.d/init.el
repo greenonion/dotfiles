@@ -80,6 +80,9 @@
     ;; emacs-lisp
     elisp-slime-nav paredit
 
+    ;; racket
+    geiser
+
     ;; elasticsearch
     es-mode
 
@@ -780,6 +783,11 @@ comint-replace-by-expanded-history-before-point."
 ;; -----
 (add-to-list 'auto-mode-alist '("\\.zsh$" . shell-script-mode))
 
+;; Racket
+;; ------
+
+(add-hook #'scheme-mode-hook #'paredit-mode)
+
 ;; Elisp
 ;; -----
 
@@ -1468,7 +1476,8 @@ comint-replace-by-expanded-history-before-point."
 (use-package rainbow-delimiters
   :init
   (add-hook #'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode))
+  (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode)
+  (add-hook #'scheme-mode-hook #'rainbow-delimiters-mode))
 
 ;; *******************
 ;; Extra Functionality
