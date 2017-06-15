@@ -177,6 +177,20 @@
 (setq-default indicate-empty-lines nil)
 (setq-default indicate-buffer-boundaries nil)
 
+;; Turn off all kinds of modes, I don't need the menu bar, or the tool bar:
+(when (functionp 'menu-bar-mode)
+  (menu-bar-mode -1))
+(when (functionp 'set-scroll-bar-mode)
+  (set-scroll-bar-mode 'nil))
+(when (functionp 'mouse-wheel-mode)
+  (mouse-wheel-mode -1))
+(when (functionp 'tooltip-mode)
+  (tooltip-mode -1))
+(when (functionp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (functionp 'blink-cursor-mode)
+  (blink-cursor-mode -1))
+
 ;; don't blink, please
 (when (functionp 'blink-cursor-mode)
   (blink-cursor-mode -1))
