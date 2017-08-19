@@ -46,9 +46,10 @@
     company popup
 
     ;; editing utilities
-    smex ag ido-ubiquitous smartparens smooth-scrolling flx-ido golden-ratio
-    fill-column-indicator anzu smart-tab smartparens shrink-whitespace undo-tree
-    iedit smartscan ido-vertical-mode vlf imenu-anywhere projectile
+    smex ag ido-completing-read+ smartparens smooth-scrolling flx-ido
+    golden-ratio fill-column-indicator anzu smart-tab smartparens
+    shrink-whitespace undo-tree iedit smartscan ido-vertical-mode vlf
+    imenu-anywhere projectile
 
     ;; infrastructure
     restclient
@@ -768,7 +769,7 @@ comint-replace-by-expanded-history-before-point."
 (defun my/component-reset ()
   (interactive)
   (save-some-buffers)
-  (cider-interactive-eval "(reset)"))
+  (cider-interactive-eval "(reloaded.repl/reset)"))
 
 (use-package cider
   :defer 30
@@ -1396,7 +1397,7 @@ comint-replace-by-expanded-history-before-point."
 
 (use-package ido
   :config
-  (use-package ido-ubiquitous
+  (use-package ido-completing-read+
     :init (ido-ubiquitous-mode 1))
   (use-package flx-ido
     :init (flx-ido-mode 1)
