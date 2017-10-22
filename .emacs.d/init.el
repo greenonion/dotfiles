@@ -32,9 +32,6 @@
     ;; package management
     use-package
 
-    ;; I guess this is useful
-    better-defaults
-
     ;; themeing
     rainbow-mode color-theme-sanityinc-tomorrow smart-mode-line
     beacon rainbow-delimiters
