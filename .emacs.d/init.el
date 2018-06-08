@@ -9,7 +9,7 @@
 
 ;; Initialize all ELPA packages
 (require 'package)
-(package-initialize)
+(unless package--initialized (package-initialize t))
 
 (setq package-archives '(("melpa" . "http://melpa.org/packages/")
                          ("melpa-stable" . "http://stable.melpa.org/packages/")
