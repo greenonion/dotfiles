@@ -763,6 +763,10 @@ comint-replace-by-expanded-history-before-point."
   (paredit-mode 1)
   (eldoc-mode 1))
 
+(defun my/trailing-whitespace ()
+  (interactive)
+  (setq-local show-trailing-whitespace nil))
+
 (defun my/component-reset ()
   (interactive)
   (save-some-buffers)
@@ -773,6 +777,7 @@ comint-replace-by-expanded-history-before-point."
   :init
   (add-hook #'cider-mode-hook #'my/setup-cider)
   (add-hook #'cider-repl-mode-hook #'my/setup-cider)
+  (add-hook #'cider-repl-mode-hook #'my/trailing-whitespace)
   (add-hook #'cider-mode-hook #'my/setup-clojure-hook)
   (add-hook #'cider-repl-mode-hook #'my/setup-clojure-hook)
   (add-hook #'cider-mode-hook #'company-mode)
@@ -799,6 +804,10 @@ comint-replace-by-expanded-history-before-point."
 ;; ------
 
 (add-hook #'scheme-mode-hook #'paredit-mode)
+
+(use-package geiser
+  :init
+  (add-hook 'geiser-repl-mode-hook 'my/trailing-whitespace))
 
 ;; Elisp
 ;; -----
