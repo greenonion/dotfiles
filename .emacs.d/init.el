@@ -46,19 +46,13 @@
     smex ag ido-completing-read+ smartparens smooth-scrolling flx-ido
     golden-ratio fill-column-indicator anzu smart-tab smartparens
     shrink-whitespace undo-tree iedit smartscan ido-vertical-mode vlf
-    imenu-anywhere projectile
+    imenu-anywhere projectile deadgrep
 
     ;; infrastructure
     restclient
 
-    ;; highlighting
-    idle-highlight-mode
-
     ;; org-mode
     org org-bullets
-
-    ;; buffer utils
-    dired+
 
     ;; flycheck
     flycheck flycheck-tip flycheck-pos-tip
@@ -73,7 +67,8 @@
     json-mode js2-mode
 
     ;; ruby
-    ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
+    enh-ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
+    ;; ruby-mode
 
     ;; emacs-lisp
     elisp-slime-nav paredit
@@ -635,6 +630,15 @@ comint-replace-by-expanded-history-before-point."
     (add-to-list 'tramp-remote-path "/opt/java/current/bin")
     (add-to-list 'tramp-remote-path "~/bin")))
 
+;; Deadgrep
+;; --------
+
+(use-package deadgrep
+  :defer 5
+  :config
+  (global-set-key (kbd "<f5>") #'deadgrep))
+
+
 ;; Spell check and flyspell settings
 ;; ---------------------------------
 
@@ -895,26 +899,21 @@ comint-replace-by-expanded-history-before-point."
 ;; Ruby
 ;; ----
 
-;; (add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.gemspec\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.ru\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Gemfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Guardfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Capfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.cap\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.thor\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.rabl\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Thorfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Vagrantfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Podfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("\\.podspec\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Puppetfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Berksfile\\'" . ruby-mode))
-;; (add-to-list 'auto-mode-alist '("Appraisals\\'" . ruby-mode))
+;; (use-package ruby-mode
+;;   :mode (("\\.rake\\'" . ruby-mode)
+;;          ("Rakefile\\'" . ruby-mode)
+;;          ("\\.gemspec\\'" . ruby-mode)
+;;          ("\\.ru\\'" . ruby-mode)
+;;          ("Gemfile\\'" . ruby-mode)
+;;          ("Guardfile\\'" . ruby-mode)
+;;          ("Capfile\\'" . ruby-mode)
+;;          ("\\.cap\\'" . ruby-mode))
+;;   :config
+;;   (progn
+;;     (inf-ruby-minor-mode +1)
+;;     (setq ruby-insert-encoding-magic-comment nil)))
 
-(use-package ruby-mode
+(use-package enh-ruby-mode
   :mode (("\\.rake\\'" . ruby-mode)
          ("Rakefile\\'" . ruby-mode)
          ("\\.gemspec\\'" . ruby-mode)
@@ -923,14 +922,26 @@ comint-replace-by-expanded-history-before-point."
          ("Guardfile\\'" . ruby-mode)
          ("Capfile\\'" . ruby-mode)
          ("\\.cap\\'" . ruby-mode))
+  :interpreter "ruby"
+  :init
+  (progn
+    (setq enh-ruby-deep-indent-paren nil
+          enh-ruby-hanging-paren-deep-indent-level 2)
+    (add-hook 'enh-ruby-mode-hook 'company-mode))
   :config
   (progn
-    (inf-ruby-minor-mode +1)
-    (setq ruby-insert-encoding-magic-comment nil)))
+    (inf-ruby-minor-mode +1)))
+
+(use-package rubocop
+  :init
+  ;;(add-hook 'ruby-mode-hook 'rubocop-mode)
+  (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
+  :diminish "")
 
 (use-package ruby-tools
   :init
-  (add-hook 'ruby-mode-hook 'ruby-tools-mode)
+  ;;(add-hook 'ruby-mode-hook 'ruby-tools-mode)
+  (add-hook 'enh-ruby-mode-hook 'ruby-tools-mode)
   :diminish "")
 
 (use-package rbenv
@@ -962,7 +973,8 @@ comint-replace-by-expanded-history-before-point."
 
 (use-package robe
   :init
-  (add-hook 'ruby-mode-hook 'robe-mode)
+  ;;(add-hook 'ruby-mode-hook 'robe-mode)
+  (add-hook 'enh-ruby-mode-hook 'robe-mode)
   :diminish ""
   :config
   (eval-after-load 'company
@@ -1144,7 +1156,8 @@ comint-replace-by-expanded-history-before-point."
   :diminish flycheck-mode
   :config
   (progn
-    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+    (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc
+                                               ruby-reek))
     (use-package flycheck-pos-tip
       :init (flycheck-pos-tip-mode))
     (use-package helm-flycheck
@@ -1179,6 +1192,8 @@ comint-replace-by-expanded-history-before-point."
   :commands projectile-global-mode
   :diminish projectile-mode
   :config
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (bind-key "C-c p b" #'projectile-switch-to-buffer #'projectile-command-map)
   (bind-key "C-c p K" #'projectile-kill-buffers #'projectile-command-map)
 
@@ -1479,16 +1494,6 @@ comint-replace-by-expanded-history-before-point."
 
 ;; View large files
 (use-package vlf-setup)
-
-;; idle-highlight-mode
-;; -------------------
-
-;; Hightlight idle things. Only in certain modes.
-(use-package idle-hightlight-mode
-  :init
-  (add-hook 'java-mode-hook #'idle-highlight-mode)
-  (add-hook 'emacs-lisp-mode-hook #'idle-highlight-mode)
-  (add-hook 'clojure-lisp-mode-hook #'idle-highlight-mode))
 
 ;; rainbow-delimiters-mode
 ;; -----------------------
