@@ -711,7 +711,7 @@ comint-replace-by-expanded-history-before-point."
 ;; *********************
 
 ;; remove some backends form vc-mode
-(setq vc-handled-backends '())
+(setq vc-handled-backends '(git))
 
 ;; highlight FIXME and TODO
 (defun my/add-watchwords ()
