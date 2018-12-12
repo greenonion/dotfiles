@@ -893,9 +893,20 @@ comint-replace-by-expanded-history-before-point."
 
 ;; Elasticsearch
 
-(use-package es-mode
-  :ensure t
-  :mode "\\.es$")
+(when (file-exists-p "~/dvp/forks/es-mode")
+  (progn
+    (add-to-list 'load-path "~/dvp/forks/es-mode")
+    (use-package es-mode
+      :ensure nil
+      :init (use-package ob-elasticsearch
+	      :ensure nil)
+      :mode "\\.es$"))
+  (progn
+    (use-package es-mode
+      :ensure t
+      :init (use-package ob-elasticsearch
+	      :ensure nil)
+      :mode "\\.es$")))
 
 ;; Ruby
 ;; ----
