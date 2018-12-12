@@ -84,6 +84,7 @@
 
     ;; helm
     helm helm-projectile helm-ag helm-swoop helm-flx helm-flycheck
+    helm-flyspell
 
     ;; git
     magit git-gutter git-timemachine with-editor
@@ -655,9 +656,9 @@ comint-replace-by-expanded-history-before-point."
               "--ignore=4")))
 
 ;; hunspell
-(when (executable-find "hunspell")
-  (setq ispell-program-name (executable-find "hunspell"))
-  (setq ispell-extra-args '("-d en_GB")))
+;; (when (executable-find "hunspell")
+;;   (setq ispell-program-name (executable-find "hunspell"))
+;;   (setq ispell-extra-args '("-d en_GB")))
 
 ;; blindly copy-pasting here:
 (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
@@ -665,14 +666,14 @@ comint-replace-by-expanded-history-before-point."
 (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
 (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
 
-(defun my/enable-flyspell-prog-mode ()
-  (interactive)
-  (flyspell-prog-mode))
-
 (use-package flyspell
   :defer t
   :diminish ""
-  :init (add-hook 'prog-mode-hook #'my/enable-flyspell-prog-mode))
+  :init (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  :config
+  (use-package helm-flyspell
+    :init
+    (define-key flyspell-mode-map (kbd "M-S") #'helm-flyspell-correct)))
 
 ;; Saveplace
 ;; ---------
