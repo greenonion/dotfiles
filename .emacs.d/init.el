@@ -1312,7 +1312,8 @@ comint-replace-by-expanded-history-before-point."
    ("M-y" . helm-show-kill-ring)
    ("C-x C-i" . helm-semantic-or-imenu)
    ("M-x" . helm-M-x)
-   ("C-x b" . helm-mini))
+   ("C-x b" . helm-mini)
+   ("C-x C-o" . helm-occur))
   :config
   (use-package helm-files
     :config (setq helm-ff-file-compressed-list '("gz" "bz2" "zip" "tgz" "xz" "txz")))
