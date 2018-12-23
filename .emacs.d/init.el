@@ -64,7 +64,7 @@
     coffee-mode
 
     ;; javascript
-    json-mode js2-mode
+    json-mode js2-mode xref-js2 tide rjsx-mode
 
     ;; ruby
     enh-ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
@@ -888,8 +888,13 @@ comint-replace-by-expanded-history-before-point."
 (use-package web-mode
   :mode (("\\.erb\\'" . web-mode)
          ("\\.html?\\'" . web-mode)
-         ("\\.hbs\\'" . web-mode))
-  :init (add-hook 'web-mode-hook  'my/web-mode-hook))
+         ("\\.hbs\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode))
+  :init
+  (add-hook 'web-mode-hook  'my/web-mode-hook)
+  (lambda ()
+    (when (string-equal "jsx" (file-name-extension buffer-file-name))
+      (setup-tide-mode))))
 
 ;; Elasticsearch
 
@@ -1001,7 +1006,24 @@ comint-replace-by-expanded-history-before-point."
   :mode "\\.js\\'"
   :config
   (js2-imenu-extras-setup)
-  (setq-default js-auto-indent-flag nil))
+  (setq-default js-auto-indent-flag nil)
+  (electric-layout-mode nil)
+  (define-key js2-mode-map (kbd "M-.") nil))
+
+(use-package xref-js2
+  :init
+  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
+
+(use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook (js2-mode
+         (before-save . tide-format-before-save))
+  :config
+  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))
+
+(use-package rjsx-mode
+  :mode "components\\/.*\\.js\\'")
 
 ;; Org-mode
 ;; --------
