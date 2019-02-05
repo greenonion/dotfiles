@@ -52,7 +52,7 @@
     restclient
 
     ;; org-mode
-    org org-bullets
+    org org-bullets org-pomodoro
 
     ;; flycheck
     flycheck flycheck-tip flycheck-pos-tip
