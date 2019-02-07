@@ -32,3 +32,6 @@ alias gps="ps -c -r -ax -o command,pid,pcpu,time | sed 's/\(PID *\)%/\1 %/' | he
 function strace {
     sudo dtruss -f sudo -u `whoami` $*
 }
+
+# Automatically remove old packages
+export HOMEBREW_INSTALL_CLEANUP=1
