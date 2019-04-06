@@ -52,7 +52,7 @@
     restclient
 
     ;; org-mode
-    org org-bullets org-pomodoro
+    org org-pomodoro
 
     ;; flycheck
     flycheck flycheck-tip flycheck-pos-tip
@@ -1032,11 +1032,6 @@ comint-replace-by-expanded-history-before-point."
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)))
-
-;; org-bullets
-(use-package org-bullets
-  :init
-  (add-hook 'org-mode-hook #'org-bullets-mode))
 
 ;; *****
 ;; Theme
