@@ -57,6 +57,9 @@
     ;; flycheck
     flycheck flycheck-tip flycheck-pos-tip
 
+    ;; languages
+    lsp-mode company-lsp
+
     ;; clojure
     clojure-mode clojure-mode-extra-font-locking cider paredit paren-face ac-cider
 
@@ -67,8 +70,7 @@
     json-mode js2-mode xref-js2 tide rjsx-mode
 
     ;; ruby
-    enh-ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
-    ;; ruby-mode
+    ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
 
     ;; emacs-lisp
     elisp-slime-nav paredit
@@ -730,6 +732,19 @@ comint-replace-by-expanded-history-before-point."
 (use-package subword
   :diminish subword-mode)
 
+;; Language Server Protocol
+;; ------------------------
+
+(use-package lsp-mode
+  :commands lsp)
+
+;; (use-package lsp-ui :commands lsp-ui-mode)
+
+(use-package company-lsp
+  :commands company-lsp
+  :config
+  (push 'company-lsp company-backends))
+
 ;; Clojure
 ;; -------
 
@@ -916,21 +931,7 @@ comint-replace-by-expanded-history-before-point."
 ;; Ruby
 ;; ----
 
-;; (use-package ruby-mode
-;;   :mode (("\\.rake\\'" . ruby-mode)
-;;          ("Rakefile\\'" . ruby-mode)
-;;          ("\\.gemspec\\'" . ruby-mode)
-;;          ("\\.ru\\'" . ruby-mode)
-;;          ("Gemfile\\'" . ruby-mode)
-;;          ("Guardfile\\'" . ruby-mode)
-;;          ("Capfile\\'" . ruby-mode)
-;;          ("\\.cap\\'" . ruby-mode))
-;;   :config
-;;   (progn
-;;     (inf-ruby-minor-mode +1)
-;;     (setq ruby-insert-encoding-magic-comment nil)))
-
-(use-package enh-ruby-mode
+(use-package ruby-mode
   :mode (("\\.rake\\'" . ruby-mode)
          ("Rakefile\\'" . ruby-mode)
          ("\\.gemspec\\'" . ruby-mode)
@@ -939,26 +940,22 @@ comint-replace-by-expanded-history-before-point."
          ("Guardfile\\'" . ruby-mode)
          ("Capfile\\'" . ruby-mode)
          ("\\.cap\\'" . ruby-mode))
-  :interpreter "ruby"
   :init
-  (progn
-    (setq enh-ruby-deep-indent-paren nil
-          enh-ruby-hanging-paren-deep-indent-level 2)
-    (add-hook 'enh-ruby-mode-hook 'company-mode))
+  (add-hook 'ruby-mode-hook 'company-mode)
+  (add-hook 'ruby-mode-hook 'lsp)
   :config
   (progn
-    (inf-ruby-minor-mode +1)))
+    (inf-ruby-minor-mode +1)
+    (setq ruby-insert-encoding-magic-comment nil)))
 
 (use-package rubocop
   :init
-  ;;(add-hook 'ruby-mode-hook 'rubocop-mode)
-  (add-hook 'enh-ruby-mode-hook 'rubocop-mode)
+  (add-hook 'ruby-mode-hook 'rubocop-mode)
   :diminish "")
 
 (use-package ruby-tools
   :init
-  ;;(add-hook 'ruby-mode-hook 'ruby-tools-mode)
-  (add-hook 'enh-ruby-mode-hook 'ruby-tools-mode)
+  (add-hook 'ruby-mode-hook 'ruby-tools-mode)
   :diminish "")
 
 (use-package rbenv
@@ -968,9 +965,6 @@ comint-replace-by-expanded-history-before-point."
   (progn
     (setq rbenv-show-active-ruby-in-modeline nil)
     (global-rbenv-mode t)))
-
-(defadvice inf-ruby-console-auto (before activate-rbenv-for-robe activate)
-  (rbenv-use-corresponding))
 
 (use-package rspec-mode
   :defer 20
@@ -987,15 +981,6 @@ comint-replace-by-expanded-history-before-point."
 (use-package inf-ruby
   :init
   (add-hook 'after-init-hook 'inf-ruby-switch-setup))
-
-(use-package robe
-  :init
-  ;;(add-hook 'ruby-mode-hook 'robe-mode)
-  (add-hook 'enh-ruby-mode-hook 'robe-mode)
-  :diminish ""
-  :config
-  (eval-after-load 'company
-    '(push 'company-robe company-backends)))
 
 ;; Javascript
 ;; ----------
