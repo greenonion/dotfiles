@@ -34,7 +34,7 @@
 
     ;; themeing
     rainbow-mode color-theme-sanityinc-tomorrow smart-mode-line
-    beacon rainbow-delimiters
+    beacon rainbow-delimiters base16-theme
 
     ;; misc
     diminish exec-path-from-shell symon
@@ -1024,8 +1024,14 @@ comint-replace-by-expanded-history-before-point."
 
 (setq ns-use-srgb-colorspace t)
 
-(use-package color-theme-sanityinc-tomorrow
-  :init (load-theme 'sanityinc-tomorrow-eighties t))
+;; (use-package color-theme-sanityinc-tomorrow
+;;   :init ;(load-theme 'sanityinc-tomorrow-eighties t)
+;;   (load-theme 'sanityinc-tomorrow-day t))
+
+(use-package base16-theme
+  :ensure t
+  :config
+  (load-theme 'base16-tomorrow-night))
 
 ;; Fonts
 ;; -----
