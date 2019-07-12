@@ -55,7 +55,7 @@
     org org-pomodoro
 
     ;; flycheck
-    flycheck flycheck-tip flycheck-pos-tip
+    flycheck flycheck-tip flycheck-pos-tip flycheck-rust
 
     ;; languages
     lsp-mode company-lsp
@@ -72,6 +72,9 @@
     ;; ruby
     ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
 
+    ;; rust
+    rust-mode
+
     ;; emacs-lisp
     elisp-slime-nav paredit
 
@@ -82,7 +85,7 @@
     es-mode
 
     ;; markup language
-    markdown-mode markdown-mode+ yaml-mode web-mode
+    markdown-mode markdown-mode+ yaml-mode web-mode toml-mode
 
     ;; helm
     helm helm-projectile helm-ag helm-swoop helm-flx helm-flycheck
@@ -981,6 +984,20 @@ comint-replace-by-expanded-history-before-point."
 (use-package inf-ruby
   :init
   (add-hook 'after-init-hook 'inf-ruby-switch-setup))
+
+;; Rust
+;; ----
+
+(use-package rust-mode
+  :mode (("\\.rs\\'" . rust-mode))
+  :hook
+  (rust-mode . company-mode)
+  (rust-mode . lsp))
+
+(use-package flycheck-rust
+  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+
+(use-package toml-mode)
 
 ;; Javascript
 ;; ----------
