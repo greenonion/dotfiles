@@ -1053,14 +1053,10 @@ comint-replace-by-expanded-history-before-point."
 (defun my/setup-osx-fonts ()
   (interactive)
   (when (eq system-type 'darwin)
-    (set-fontset-font "fontset-default" 'symbol "Monaco")
-    (set-fontset-font t 'unicode "Apple Color Emoji" nil 'prepend)
-    ;; (set-default-font "Bitstream Vera Sans Mono")
-    ;; (set-default-font "Fantasque Sans Mono")
-    ;; (set-default-font "Fira Mono")
-    ;; (set-default-font "Source Code Pro")
-    (set-face-attribute 'default nil :height 120 :weight 'normal)
-    (set-face-attribute 'fixed-pitch nil :height 120 :weight 'normal)
+;;    (set-face-attribute 'default t :font "Iosevka 14")
+    (set-frame-font "Iosevka SS08" nil t)
+    (set-face-attribute 'default nil :height 140 :weight 'normal)
+    ;;(set-face-attribute 'fixed-pitch nil :height 120 :weight 'normal)
 
     ;; Anti-aliasing
     (setq mac-allow-anti-aliasing t)))
