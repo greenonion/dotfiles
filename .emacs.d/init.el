@@ -70,7 +70,7 @@
     json-mode js2-mode xref-js2 tide rjsx-mode
 
     ;; ruby
-    ruby-mode inf-ruby rbenv robe rspec-mode rubocop ruby-tools
+    ruby-mode inf-ruby rbenv robe rspec-mode ruby-tools
 
     ;; rust
     rust-mode
@@ -739,7 +739,9 @@ comint-replace-by-expanded-history-before-point."
 ;; ------------------------
 
 (use-package lsp-mode
-  :commands lsp)
+  :commands lsp
+  :config
+  (setq lsp-enable-snippet nil))
 
 ;; (use-package lsp-ui :commands lsp-ui-mode)
 
@@ -950,11 +952,6 @@ comint-replace-by-expanded-history-before-point."
   (progn
     (inf-ruby-minor-mode +1)
     (setq ruby-insert-encoding-magic-comment nil)))
-
-(use-package rubocop
-  :init
-  (add-hook 'ruby-mode-hook 'rubocop-mode)
-  :diminish "")
 
 (use-package ruby-tools
   :init
