@@ -1,5 +1,6 @@
 *~
 *.elc
+anaconda-mode
 auto-save-list
 recentf
 savehist
@@ -23,4 +24,3 @@ tramp
 /var/pcache
 ido.last
 backups
-

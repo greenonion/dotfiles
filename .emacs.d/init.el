@@ -69,6 +69,9 @@
     ;; javascript
     json-mode js2-mode xref-js2 tide rjsx-mode
 
+    ;; python
+    anaconda-mode
+
     ;; ruby
     ruby-mode inf-ruby rbenv robe rspec-mode ruby-tools
 
@@ -933,6 +936,22 @@ comint-replace-by-expanded-history-before-point."
 	      :ensure nil)
       :mode "\\.es$")))
 
+;; Python
+;; ------
+
+(use-package python
+  :defer t
+  :init
+  (setq mode-name "Python"))
+
+(use-package anaconda-mode
+  :defer t
+  :init
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+  :config
+  (eldoc-mode 1))
+
 ;; Ruby
 ;; ----
 
@@ -1156,8 +1175,7 @@ comint-replace-by-expanded-history-before-point."
 ;; Ignore electric indentation for python and yaml
 (defun electric-indent-ignore-mode (char)
   "Ignore electric indentation for python-mode"
-  (if (or (equal major-mode 'python-mode)
-          (equal major-mode 'yaml-mode))
+  (if (equal major-mode 'yaml-mode)
       'no-indent
     nil))
 (add-hook 'electric-indent-functions 'electric-indent-ignore-mode)
