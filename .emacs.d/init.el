@@ -34,7 +34,7 @@
 
     ;; themeing
     rainbow-mode color-theme-sanityinc-tomorrow smart-mode-line
-    beacon rainbow-delimiters base16-theme
+    beacon rainbow-delimiters doom-themes
 
     ;; misc
     diminish exec-path-from-shell symon
@@ -1057,14 +1057,24 @@ comint-replace-by-expanded-history-before-point."
 
 (setq ns-use-srgb-colorspace t)
 
-;; (use-package color-theme-sanityinc-tomorrow
-;;   :init ;(load-theme 'sanityinc-tomorrow-eighties t)
-;;   (load-theme 'sanityinc-tomorrow-day t))
-
-(use-package base16-theme
-  :ensure t
+(use-package doom-themes
   :config
-  (load-theme 'base16-tomorrow-night))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+;  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-one")
+  (doom-themes-treemacs-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 ;; Fonts
 ;; -----
