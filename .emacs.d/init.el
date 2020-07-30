@@ -102,6 +102,9 @@
 
     ;; docker
     dockerfile-mode
+
+    ;; nix
+    nix-mode
     ))
 
 (defvar packages-refreshed? nil)
@@ -1532,6 +1535,11 @@ comint-replace-by-expanded-history-before-point."
 (use-package beacon
   :diminish beacon-mode
   :init (beacon-mode 1))
+
+;; nix
+;; ---
+(use-package nix-mode
+  :mode "\\.nix\\'")
 
 ;; smartscan
 ;; ---------
