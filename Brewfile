@@ -1,0 +1,60 @@
+tap "adoptopenjdk/openjdk"
+tap "d12frosted/emacs-plus"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "jesseduffield/lazydocker"
+tap "koekeishiya/formulae"
+tap "mas-cli/tap"
+tap "mongodb/brew"
+tap "rbenv/tap"
+tap "universal-ctags/universal-ctags"
+cask "adoptopenjdk8"
+brew "apache-flink"
+brew "aspell"
+brew "libpng"
+brew "gettext"
+brew "openssl@1.1"
+brew "readline"
+brew "clojure"
+brew "cmake"
+brew "coreutils"
+brew "fd"
+brew "jpeg"
+brew "git"
+brew "icu4c"
+brew "harfbuzz"
+brew "imagemagick"
+brew "jansson"
+brew "leiningen"
+brew "libmagic"
+brew "librsvg"
+brew "libssh"
+brew "mariadb@10.1", link: true
+brew "mas"
+brew "maven"
+brew "node@10", link: true
+brew "overmind"
+brew "ruby-build"
+brew "rbenv"
+brew "redis"
+brew "ripgrep"
+brew "sbt"
+brew "starship"
+brew "tig"
+brew "wdiff"
+brew "zsh"
+brew "zsh-completions"
+brew "d12frosted/emacs-plus/emacs-plus@26", args: ["HEAD", "with-jansson", "without-spacemacs-icon"]
+brew "jesseduffield/lazydocker/lazydocker"
+brew "mongodb/brew/mongodb-community"
+brew "rbenv/tap/openssl@1.0"
+brew "universal-ctags/universal-ctags/universal-ctags", args: ["HEAD"]
+mas "Bear", id: 1091189122
+mas "Keynote", id: 409183694
+mas "Numbers", id: 409203825
+mas "Pages", id: 409201541
+mas "Slack", id: 803453959
+mas "The Unarchiver", id: 425424353
+mas "Things", id: 904280696
