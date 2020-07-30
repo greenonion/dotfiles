@@ -73,7 +73,7 @@
     anaconda-mode
 
     ;; ruby
-    ruby-mode inf-ruby rbenv robe rspec-mode ruby-tools
+    ruby-mode inf-ruby rbenv rspec-mode ruby-tools
 
     ;; rust
     rust-mode
