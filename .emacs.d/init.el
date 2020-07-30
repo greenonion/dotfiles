@@ -58,7 +58,7 @@
     flycheck flycheck-tip flycheck-pos-tip flycheck-rust
 
     ;; languages
-    lsp-mode company-lsp
+    lsp-mode company-lsp helm-lsp
 
     ;; clojure
     clojure-mode clojure-mode-extra-font-locking cider paredit paren-face ac-cider
@@ -742,10 +742,12 @@ comint-replace-by-expanded-history-before-point."
 ;; ------------------------
 
 (use-package lsp-mode
-  :commands lsp
+  :hook (ruby-mode . lsp-deferred)
+  :commands (lsp lsp-deferred)
   :config
   (setq lsp-enable-snippet nil))
 
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 ;; (use-package lsp-ui :commands lsp-ui-mode)
 
 (use-package company-lsp
@@ -966,11 +968,15 @@ comint-replace-by-expanded-history-before-point."
          ("\\.cap\\'" . ruby-mode))
   :init
   (add-hook 'ruby-mode-hook 'company-mode)
-  (add-hook 'ruby-mode-hook 'lsp)
   :config
   (progn
     (inf-ruby-minor-mode +1)
     (setq ruby-insert-encoding-magic-comment nil)))
+
+;; We use rubocop via solargraph
+;; (use-package rubocop
+;;   :hook (ruby-mode . rubocop-mode)
+;;   :diminish "")
 
 (use-package ruby-tools
   :init
@@ -988,7 +994,9 @@ comint-replace-by-expanded-history-before-point."
 (use-package rspec-mode
   :defer 20
   :diminish rspec-mode
-  :commands rspec-mode)
+  :commands rspec-mode
+  :config
+  (setq rspec-use-rvm nil))
 
 (defadvice rspec-compile (around rspec-compile-around)
   "Use BASH shell for running the specs because of ZSH issues."
