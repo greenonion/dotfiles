@@ -186,8 +186,9 @@
 (setq-default indicate-buffer-boundaries nil)
 
 ;; Turn off all kinds of modes, I don't need the menu bar, or the tool bar:
-(when (functionp 'menu-bar-mode)
-  (menu-bar-mode -1))
+;; This triggers a bug in mac-emacs
+;; (when (functionp 'menu-bar-mode)
+;;   (menu-bar-mode -1))
 (when (functionp 'set-scroll-bar-mode)
   (set-scroll-bar-mode 'nil))
 (when (functionp 'mouse-wheel-mode)
@@ -341,7 +342,26 @@
 ;; OS-specific settings
 ;; --------------------
 
+(defun mac-switch-meta nil
+    "Switch meta between option and command."
+    (interactive)
+    (if (eq mac-option-modifier nil)
+        (progn
+          (setq mac-option-modifier 'meta)
+          (setq mac-command-modifier 'super))
+      (progn
+        (setq mac-option-modifier nil)
+        (setq mac-command-modifier 'meta))))
+
 (when (eq system-type 'darwin)
+  (setq mac-option-modifier 'meta)
+  (setq mac-command-modifier 'super)
+
+  (global-set-key [(super v)] 'yank)
+  (global-set-key [(super c)] 'kill-ring-save)
+  (global-set-key [(super z)] 'undo)
+  (global-set-key [(super l)] 'goto-line)
+
   (setq ns-use-native-fullscreen nil)
   ;; brew install coreutils
   (if (executable-find "gls")
