@@ -7,13 +7,25 @@
 ;; Keep track of loading time
 (defconst emacs-start-time (current-time))
 
-;; Initialize all ELPA packages
-(require 'package)
-(unless package--initialized (package-initialize t))
+;; Initialize straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(setq package-archives '(("melpa" . "http://melpa.org/packages/")
-                         ("melpa-stable" . "http://stable.melpa.org/packages/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")))
+;; We will be using use-package to install packages
+(straight-use-package 'use-package)
+;; Set to t to debug package loading or nil to disable
+(defvar use-package-verbose)
+(setq use-package-verbose t)
 
 (let ((elapsed (float-time (time-subtract (current-time) emacs-start-time))))
   (message "Loaded packages in %.3fs" elapsed))
@@ -24,119 +36,6 @@
   (load custom-file))
 
 (require 'cl-lib)
-
-;; Packages that need to be installed
-
-(defvar my/install-packages
-  '(
-    ;; package management
-    use-package
-
-    ;; themeing
-    rainbow-mode color-theme-sanityinc-tomorrow smart-mode-line
-    beacon rainbow-delimiters doom-themes
-
-    ;; misc
-    diminish exec-path-from-shell symon
-
-    ;; for auto-complete
-    company popup
-
-    ;; editing utilities
-    smex ag ido-completing-read+ smartparens smooth-scrolling flx-ido
-    golden-ratio fill-column-indicator anzu smart-tab smartparens
-    shrink-whitespace undo-tree iedit smartscan ido-vertical-mode vlf
-    imenu-anywhere projectile deadgrep
-
-    ;; infrastructure
-    restclient
-
-    ;; org-mode
-    org org-pomodoro
-
-    ;; flycheck
-    flycheck flycheck-tip flycheck-pos-tip flycheck-rust
-
-    ;; languages
-    lsp-mode company-lsp helm-lsp
-
-    ;; clojure
-    clojure-mode clojure-mode-extra-font-locking cider paredit paren-face ac-cider
-
-    ;; coffeescript
-    coffee-mode
-
-    ;; javascript
-    json-mode js2-mode xref-js2 tide rjsx-mode
-
-    ;; python
-    anaconda-mode
-
-    ;; ruby
-    ruby-mode inf-ruby rbenv rspec-mode ruby-tools
-
-    ;; rust
-    rust-mode
-
-    ;; emacs-lisp
-    elisp-slime-nav paredit
-
-    ;; racket
-    geiser
-
-    ;; elasticsearch
-    es-mode
-
-    ;; markup language
-    markdown-mode markdown-mode+ yaml-mode web-mode toml-mode
-
-    ;; helm
-    helm helm-projectile helm-ag helm-swoop helm-flx helm-flycheck
-    helm-flyspell
-
-    ;; git
-    magit git-gutter git-timemachine with-editor
-
-    ;; eshell
-    eshell-prompt-extras
-
-    ;; docker
-    dockerfile-mode
-
-    ;; nix
-    nix-mode
-    ))
-
-(defvar packages-refreshed? nil)
-
-(dolist (p my/install-packages)
-  (unless (package-installed-p p)
-    (unless packages-refreshed?
-      (package-refresh-contents)
-      (setq packages-refreshed? t))
-    (unwind-protect
-        (condition-case ex
-            (package-install p)
-          ('error (message "Failed to install package [%s], caught exception: [%s]"
-                           p ex)))
-      (message "Installed %s" p))))
-
-;; Load use-package, used for loading packages everywhere else
-(require 'use-package)
-;; Set to t to debug package loading or nil to disable
-(setq use-package-verbose t)
-
-;; Setting up $PATH and other vars
-(use-package exec-path-from-shell
-  :defer t
-  :init
-  (progn
-    (setq exec-path-from-shell-variables '("JAVA_HOME"
-                                           "PATH"
-                                           "WORKON_HOME"
-                                           "MANPATH"
-                                           "LANG"))
-    (exec-path-from-shell-initialize)))
 
 ;; Basics and settings used everywhere
 ;; -----------------------------------
@@ -223,13 +122,13 @@
 (when (window-system)
   (setq confirm-kill-emacs 'yes-or-no-p))
 
+;; cursor follows visual lines (when text wraps around)
 (setq line-move-visual t)
 
 ;; hide mouse while typing
 (setq make-pointer-invisible t)
 
-;; set fill-columnd to 80 chars and tab width to 2
-(setq-default fill-column 80)
+;; set tab width to 2
 (setq-default default-tab-width 2)
 (setq-default indent-tabs-mode nil)
 
@@ -241,11 +140,6 @@
 
 ;; require newline at the end of files
 (setq require-final-newline t)
-
-;; uniquify buffers
-(use-package uniquify
-  :config
-  (setq uniquify-buffer-name-style 'post-forward-angle-brackets))
 
 ;; search (and search/replace) using regex by default
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
@@ -271,11 +165,6 @@
 ;; turn on auto-fill mode in text buffers
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-(use-package diminish
-  :init
-  (progn
-    (diminish 'auto-fill-function "")))
-
 ;; never kill the *scratch* buffer
 (defadvice kill-buffer (around kill-buffer-around-advice activate)
   (let ((buffer-to-kill (ad-get-arg 0)))
@@ -283,12 +172,36 @@
         (bury-buffer)
       ad-do-it)))
 
-;; version control stuff
-
 ;; automatically revert file if changed on disk
 (global-auto-revert-mode 1)
+
 ;; be quiet about reverting files
 (setq auto-revert-verbose nil)
+
+;; General utilities and environment
+;; ---------------------------------
+
+;; Setting up $PATH and other vars
+(use-package exec-path-from-shell
+  :straight t
+  :init
+  (progn
+    (setq exec-path-from-shell-variables '("JAVA_HOME"
+                                           "PATH"
+                                           "WORKON_HOME"
+                                           "MANPATH"
+                                           "LANG"))
+    (exec-path-from-shell-initialize)))
+
+;; uniquify buffers
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets))
+
+(use-package diminish
+  :init
+  (progn
+    (diminish 'auto-fill-function "")))
 
 ;; start server if not running but only for gui
 (require 'server nil t)
@@ -301,16 +214,6 @@
 ;; GUI-specific
 (when (window-system)
   (setenv "EMACS_GUI" "t"))
-
-;; prettify symbols
-(when (boundp 'global-prettify-symbols-mode)
-  (add-hook 'emacs-lisp-mode-hook
-            (lambda ()
-              (push '("lambda" . ?λ) prettify-symbols-alist)))
-  (add-hook 'clojure-mode-hook
-            (lambda ()
-              (push '("fn" . ?ƒ) prettify-symbols-alist)))
-  (global-prettify-symbols-mode +1))
 
 ;; display time and load on modeline
 (setq
@@ -335,9 +238,6 @@
       ;;   "openssl s_client -connect %h:%p -no_ssl2 -ign_eof")
       '("gnutls-cli -p %p %h"
         "openssl s_client -connect %h:%p -no_ssl2 -no_ssl3 -ign_eof"))
-
-(use-package helm-flx
-  :init (helm-flx-mode +1))
 
 ;; OS-specific settings
 ;; --------------------
@@ -399,13 +299,14 @@ When using Homebrew, install it using \"brew install trash\"."
   (global-set-key [wheel-up] 'previous-line)
   (global-set-key [wheel-down] 'next-line))
 
-;; Settings for temporary files
+;; save minibuffer histories
 (setq savehist-additional-variables
       ;; also save my search entries
       '(search-ring regexp-search-ring)
       savehist-file "~/.emacs.d/savehist")
-(savehist-mode t)
-(setq-default save-place t)
+(savehist-mode 1)
+;; remember where I've left off in each file
+(save-place-mode 1)
 
 ;; delete auto-save files
 (setq delete-auto-save-files t)
@@ -414,6 +315,49 @@ When using Homebrew, install it using \"brew install trash\"."
 
 ;; delete old backups silently
 (setq delete-old-versions t)
+
+;; *****
+;; Theme
+;; *****
+
+(setq ns-use-srgb-colorspace t)
+
+(use-package doom-themes
+  :straight t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+;  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-one")
+  (doom-themes-treemacs-config)
+
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+;; Fonts
+;; -----
+
+(defun my/setup-osx-fonts ()
+  (interactive)
+  (when (eq system-type 'darwin)
+;;    (set-face-attribute 'default t :font "Iosevka 14")
+    (set-frame-font "Iosevka SS08" nil t)
+    (set-face-attribute 'default nil :height 140 :weight 'normal)
+    ;;(set-face-attribute 'fixed-pitch nil :height 120 :weight 'normal)
+
+    ;; Anti-aliasing
+    (setq mac-allow-anti-aliasing t)))
+
+(when (eq system-type 'darwin)
+  (add-hook 'after-init-hook #'my/setup-osx-fonts))
 
 ;; Shell settings
 
@@ -577,68 +521,15 @@ comint-replace-by-expanded-history-before-point."
     (magit-status default-directory)
     nil))
 
-(defun my/create-or-switch-to-delta-buffer ()
-  "Switch to the *eshell delta* buffer, or create it"
-  (interactive)
-  (if (get-buffer "*eshell-delta*")
-      (switch-to-buffer "*eshell-delta*")
-    (let ((eshell-buffer-name "*eshell-delta*"))
-      (eshell))))
-
-(global-set-key (kbd "C-x d") 'my/create-or-switch-to-delta-buffer)
-
-(defun my/create-or-switch-to-eshell-1 ()
-  "Switch to the *eshell* buffer, or create it"
-  (interactive)
-  (if (get-buffer "*eshell*")
-      (switch-to-buffer "*eshell*")
-    (let ((eshell-buffer-name "*eshell*"))
-      (eshell))))
-
-(defun my/create-or-switch-to-eshell-2 ()
-  "Switch to the *eshell*<2> buffer, or create it"
-  (interactive)
-  (if (get-buffer "*eshell*<2>")
-      (switch-to-buffer "*eshell*<2>")
-    (let ((eshell-buffer-name "*eshell*<2>"))
-      (eshell))))
-
-(defun my/create-or-switch-to-eshell-3 ()
-  "Switch to the *eshell*<3> buffer, or create it"
-  (interactive)
-  (if (get-buffer "*eshell*<3>")
-      (switch-to-buffer "*eshell*<3>")
-    (let ((eshell-buffer-name "*eshell*<3>"))
-      (eshell))))
-
-(defun my/create-or-switch-to-eshell-4 ()
-  "Switch to the *eshell*<4> buffer, or create it"
-  (interactive)
-  (if (get-buffer "*eshell*<4>")
-      (switch-to-buffer "*eshell*<4>")
-    (let ((eshell-buffer-name "*eshell*<4>"))
-      (eshell))))
-
-(global-set-key (kbd "H-1") 'my/create-or-switch-to-eshell-1)
-(global-set-key (kbd "H-2") 'my/create-or-switch-to-eshell-2)
-(global-set-key (kbd "H-3") 'my/create-or-switch-to-eshell-3)
-(global-set-key (kbd "H-4") 'my/create-or-switch-to-eshell-4)
-(global-set-key (kbd "s-1") 'my/create-or-switch-to-eshell-1)
-(global-set-key (kbd "s-2") 'my/create-or-switch-to-eshell-2)
-(global-set-key (kbd "s-3") 'my/create-or-switch-to-eshell-3)
-(global-set-key (kbd "s-4") 'my/create-or-switch-to-eshell-4)
-(global-set-key (kbd "M-1") 'my/create-or-switch-to-eshell-1)
-(global-set-key (kbd "M-2") 'my/create-or-switch-to-eshell-2)
-(global-set-key (kbd "M-3") 'my/create-or-switch-to-eshell-3)
-(global-set-key (kbd "M-4") 'my/create-or-switch-to-eshell-4)
-
 ;; Docker mode
 ;; -----------
 
 (use-package dockerfile-mode
+  :straight t
   :mode (("Dockerfile\\'" . dockerfile-mode)))
 
-;; Tramp settings
+;; Tramp
+;; -----
 (use-package tramp
   :defer 5
   :config
@@ -669,6 +560,7 @@ comint-replace-by-expanded-history-before-point."
 ;; --------
 
 (use-package deadgrep
+  :straight t
   :defer 5
   :config
   (global-set-key (kbd "<f5>") #'deadgrep))
@@ -706,18 +598,9 @@ comint-replace-by-expanded-history-before-point."
   :init (add-hook 'prog-mode-hook #'flyspell-prog-mode)
   :config
   (use-package helm-flyspell
+    :straight t
     :init
     (define-key flyspell-mode-map (kbd "M-S") #'helm-flyspell-correct)))
-
-;; Saveplace
-;; ---------
-
-;; navigates to where you left off
-(use-package saveplace
-  :defer t
-  :init
-  (setq-default save-place t)
-  (setq save-place-file (expand-file-name ".places" user-emacs-directory)))
 
 ;; whitespace mode
 (setq whitespace-style '(tabs newline space-mark
@@ -745,7 +628,7 @@ comint-replace-by-expanded-history-before-point."
 ;; Programming Languages
 ;; *********************
 
-;; remove some backends form vc-mode
+;; remove some backends from vc-mode
 (setq vc-handled-backends '(git))
 
 ;; highlight FIXME and TODO
@@ -762,21 +645,26 @@ comint-replace-by-expanded-history-before-point."
 
 ;; hide the lighter in subword mode
 (use-package subword
-  :diminish subword-mode)
+  :hook (prog-mode . subword-mode)
+  :diminish "")
 
 ;; Language Server Protocol
 ;; ------------------------
 
 (use-package lsp-mode
+  :straight t
   :hook (ruby-mode . lsp-deferred)
   :commands (lsp lsp-deferred)
   :config
   (setq lsp-enable-snippet nil))
 
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(use-package helm-lsp
+  :straight t
+  :commands helm-lsp-workspace-symbol)
 ;; (use-package lsp-ui :commands lsp-ui-mode)
 
 (use-package company-lsp
+  :straight t
   :commands company-lsp
   :config
   (push 'company-lsp company-backends))
@@ -792,9 +680,11 @@ comint-replace-by-expanded-history-before-point."
   (global-set-key (kbd "C-c t") 'clojure-jump-between-tests-and-code))
 
 (use-package clojure-mode
-  :init
-  (add-hook #'clojure-mode-hook #'my/setup-clojure-hook)
+  :straight t
+  :hook
+  (clojure-mode . my/setup-clojure-hook)
   :config
+  (use-package clojure-mode-extra-font-locking :straight t)
   (define-clojure-indent
     ;; Compojure routes
     (defroutes 'defun)
@@ -829,6 +719,7 @@ comint-replace-by-expanded-history-before-point."
   (cider-interactive-eval "(reloaded.repl/reset)"))
 
 (use-package cider
+  :straight t
   :defer 30
   :init
   (add-hook #'cider-mode-hook #'my/setup-cider)
@@ -846,6 +737,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ------------
 
 (use-package coffee-mode
+  :straight t
   :mode (("\\.coffee.erb\\'" . coffee-mode))
   :config
   (setq coffee-tab-width 2)
@@ -859,11 +751,13 @@ comint-replace-by-expanded-history-before-point."
 ;; Racket
 ;; ------
 
-(add-hook #'scheme-mode-hook #'paredit-mode)
+(use-package scheme-mode
+  :hook (scheme-mode . paredit-mode))
 
 (use-package geiser
-  :init
-  (add-hook 'geiser-repl-mode-hook 'my/trailing-whitespace))
+  :straight t
+  :hook
+  (geiser-repl-mode . my/trailing-whitespace))
 
 ;; Elisp
 ;; -----
@@ -899,8 +793,9 @@ comint-replace-by-expanded-history-before-point."
 (define-key lisp-interaction-mode-map (kbd "C-c C-z") 'ielm-other-window)
 
 (use-package elisp-slime-nav
+  :straight t
   :diminish elisp-slime-nav-mode
-  :init (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode))
+  :hook (emacs-lisp-mode . elisp-slime-nav-mode))
 
 ;; pretty print results
 (bind-key "M-:" 'pp-eval-expression)
@@ -920,15 +815,13 @@ comint-replace-by-expanded-history-before-point."
 ;; -----------
 
 (use-package restclient
+  :straight t
   :mode ("\\.rest\\'" . restclient-mode))
 
 ;; Web Mode
 ;; --------
 
 (defun my/web-mode-hook ()
-  ;; Disable fill column indicator mode due to a bug.
-  ;; See: https://github.com/alpaker/Fill-Column-Indicator/issues/46
-  (turn-off-fci-mode)
   ;; HTML offset indentation
   (setq web-mode-markup-indent-offset 2)
   ;; CSS offset indentation
@@ -937,32 +830,24 @@ comint-replace-by-expanded-history-before-point."
   (setq web-mode-code-indent-offset 2))
 
 (use-package web-mode
+  :straight t
   :mode (("\\.erb\\'" . web-mode)
          ("\\.html?\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
-         ("\\.jsx\\'" . web-mode))
+         ("\\.js[x]?\\'" . web-mode))
   :init
   (add-hook 'web-mode-hook  'my/web-mode-hook)
-  (lambda ()
-    (when (string-equal "jsx" (file-name-extension buffer-file-name))
-      (setup-tide-mode))))
+  ;; (lambda ()
+  ;;   (when (string-equal "jsx" (file-name-extension buffer-file-name))
+  ;;     (setup-tide-mode)))
+  )
 
 ;; Elasticsearch
 
-(when (file-exists-p "~/dvp/forks/es-mode")
-  (progn
-    (add-to-list 'load-path "~/dvp/forks/es-mode")
-    (use-package es-mode
-      :ensure nil
-      :init (use-package ob-elasticsearch
-	      :ensure nil)
-      :mode "\\.es$"))
-  (progn
-    (use-package es-mode
-      :ensure t
-      :init (use-package ob-elasticsearch
-	      :ensure nil)
-      :mode "\\.es$")))
+(use-package es-mode
+  :straight t
+  :config (use-package ob-elasticsearch)
+  :mode "\\.es$")
 
 ;; Python
 ;; ------
@@ -973,6 +858,7 @@ comint-replace-by-expanded-history-before-point."
   (setq mode-name "Python"))
 
 (use-package anaconda-mode
+  :straight t
   :defer t
   :init
   (add-hook 'python-mode-hook 'anaconda-mode)
@@ -992,8 +878,8 @@ comint-replace-by-expanded-history-before-point."
          ("Guardfile\\'" . ruby-mode)
          ("Capfile\\'" . ruby-mode)
          ("\\.cap\\'" . ruby-mode))
-  :init
-  (add-hook 'ruby-mode-hook 'company-mode)
+  :hook
+  (ruby-mode . company-mode)
   :config
   (progn
     (inf-ruby-minor-mode +1)
@@ -1005,11 +891,13 @@ comint-replace-by-expanded-history-before-point."
 ;;   :diminish "")
 
 (use-package ruby-tools
-  :init
-  (add-hook 'ruby-mode-hook 'ruby-tools-mode)
+  :straight t
+  :hook
+  (ruby-mode . ruby-tools-mode)
   :diminish "")
 
 (use-package rbenv
+  :straight t
   :defer 25
   :init
   ;; I don't really care about the active Ruby in the modeline
@@ -1018,6 +906,7 @@ comint-replace-by-expanded-history-before-point."
     (global-rbenv-mode t)))
 
 (use-package rspec-mode
+  :straight t
   :defer 20
   :diminish rspec-mode
   :commands rspec-mode
@@ -1039,43 +928,50 @@ comint-replace-by-expanded-history-before-point."
 ;; ----
 
 (use-package rust-mode
+  :straight t
   :mode (("\\.rs\\'" . rust-mode))
   :hook
   (rust-mode . company-mode)
   (rust-mode . lsp))
 
 (use-package flycheck-rust
-  :config (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  :straight t
+  :hook (flycheck-mode . flycheck-rust-setup))
 
-(use-package toml-mode)
+(use-package toml-mode
+  :straight t)
 
 ;; Javascript
 ;; ----------
 
-(setq-default js-indent-level 2)
+(use-package add-node-modules-path
+  :straight t
+  :config (add-hook 'flycheck-mode-hook #'add-node-modules-path))
 
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :config
-  (js2-imenu-extras-setup)
-  (setq-default js-auto-indent-flag nil)
-  (electric-layout-mode nil)
-  (define-key js2-mode-map (kbd "M-.") nil))
+;; (setq-default js-indent-level 2)
 
-(use-package xref-js2
-  :init
-  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
+;; (use-package js2-mode
+;;   :mode "\\.js\\'"
+;;   :config
+;;   (js2-imenu-extras-setup)
+;;   (setq-default js-auto-indent-flag nil)
+;;   (electric-layout-mode nil)
+;;   (define-key js2-mode-map (kbd "M-.") nil))
 
-(use-package tide
-  :ensure t
-  :after (typescript-mode company flycheck)
-  :hook (js2-mode
-         (before-save . tide-format-before-save))
-  :config
-  (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))
+;; (use-package xref-js2
+;;   :init
+;;   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
 
-(use-package rjsx-mode
-  :mode "components\\/.*\\.js\\'")
+;; (use-package tide
+;;   :ensure t
+;;   :after (typescript-mode company flycheck)
+;;   :hook (js2-mode
+;;          (before-save . tide-format-before-save))
+;;   :config
+;;   (flycheck-add-next-checker 'javascript-eslint 'javascript-tide 'append))
+
+;; (use-package rjsx-mode
+;;   :mode "components\\/.*\\.js\\'")
 
 ;; Org-mode
 ;; --------
@@ -1085,48 +981,6 @@ comint-replace-by-expanded-history-before-point."
          ("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)))
 
-;; *****
-;; Theme
-;; *****
-
-(setq ns-use-srgb-colorspace t)
-
-(use-package doom-themes
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-;  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-one")
-  (doom-themes-treemacs-config)
-
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-
-;; Fonts
-;; -----
-
-(defun my/setup-osx-fonts ()
-  (interactive)
-  (when (eq system-type 'darwin)
-;;    (set-face-attribute 'default t :font "Iosevka 14")
-    (set-frame-font "Iosevka SS08" nil t)
-    (set-face-attribute 'default nil :height 140 :weight 'normal)
-    ;;(set-face-attribute 'fixed-pitch nil :height 120 :weight 'normal)
-
-    ;; Anti-aliasing
-    (setq mac-allow-anti-aliasing t)))
-
-(when (eq system-type 'darwin)
-  (add-hook 'after-init-hook #'my/setup-osx-fonts))
-
 ;; ****
 ;; Misc
 ;; ****
@@ -1135,6 +989,7 @@ comint-replace-by-expanded-history-before-point."
 ;; --------
 
 (use-package smart-mode-line
+  :straight t
   :init
   (progn
     (setq sml/theme 'respectful)
@@ -1163,24 +1018,29 @@ comint-replace-by-expanded-history-before-point."
 ;; -----
 
 (use-package ediff
+  :straight t
   :config
   (progn
     (setq
      ;; Always split nicely for wide screens
      ediff-split-window-function 'split-window-horizontally)))
 
-;; fill-column-indicator
-;; ---------------------
+;; Requires emacs 27 and above
 
-(use-package fill-column-indicator
-  :init
-  (add-hook 'prog-mode-hook #'fci-mode))
+(when (not (version< emacs-version "27.0"))
+  (use-package display-fill-column-indicator
+    :straight (:type built-in)
+    :hook
+    (prog-mode . display-fill-column-indicator-mode)
+    :diminish ""
+    :config
+    (setq display-fill-column-indicator-column 80)))
 
 ;; smooth-scrolling
 ;; ----------------
 
 (use-package smooth-scrolling
-  :defer t
+  :straight t
   :config
   (setq smooth-scroll-margin 3
         scroll-margin 3
@@ -1192,6 +1052,7 @@ comint-replace-by-expanded-history-before-point."
 ;; -------
 
 (use-package paredit
+  :straight t
   :commands paredit-mode
   :diminish "()"
   :config
@@ -1232,6 +1093,7 @@ comint-replace-by-expanded-history-before-point."
 
 ;; TODO
 (use-package smartparens
+  :straight t
   :disabled t
   :defer 5
   :diminish smartparens-mode)
@@ -1240,6 +1102,7 @@ comint-replace-by-expanded-history-before-point."
 ;; --------
 
 (use-package flycheck
+  :straight t
   :defer 5
   :bind (("M-g M-n" . flycheck-next-error)
          ("M-g M-p" . flycheck-previous-error)
@@ -1249,16 +1112,22 @@ comint-replace-by-expanded-history-before-point."
   :config
   (progn
     (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc
-                                               ruby-reek))
+                                               ruby-reek
+                                               javascript-jshint
+                                               json-jsonlist))
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
     (use-package flycheck-pos-tip
+      :straight t
       :init (flycheck-pos-tip-mode))
     (use-package helm-flycheck
+      :straight t
       :init (define-key flycheck-mode-map (kbd "C-c ! h") 'helm-flycheck))))
 
 ;; with-editor
 ;; -----------
 
 (use-package with-editor
+  :straight t
   :init
   (progn
     (add-hook 'shell-mode-hook 'with-editor-export-editor)
@@ -1268,6 +1137,7 @@ comint-replace-by-expanded-history-before-point."
 ;; -----
 
 (use-package magit
+  :straight t
   :bind ("C-x g" . magit-status)
   :init (add-hook 'magit-mode-hook 'hl-line-mode)
   :config
@@ -1280,6 +1150,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ----------
 
 (use-package projectile
+  :straight t
   :defer 5
   :commands projectile-global-mode
   :diminish projectile-mode
@@ -1311,6 +1182,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ----------
 
 (use-package git-gutter
+  :straight t
   :defer t
   :bind (("C-x =" . git-gutter:popup-hunk)
          ("C-x P" . git-gutter:previous-hunk)
@@ -1327,6 +1199,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ----
 
 (use-package anzu
+  :straight t
   :defer t
   :bind ("M-%" . anzu-query-replace-regexp)
   :config
@@ -1342,6 +1215,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ----------
 
 (use-package helm-swoop
+  :straight t
   :bind (("M-i" . helm-swoop)
          ("M-I" . helm-swoop-back-to-last-point)
          ("C-c M-i" . helm-multi-swoop))
@@ -1361,6 +1235,9 @@ comint-replace-by-expanded-history-before-point."
 
 ;; helm
 ;; ----
+
+(use-package helm
+  :straight t)
 
 (use-package helm-config
   :demand t
@@ -1384,6 +1261,7 @@ comint-replace-by-expanded-history-before-point."
   (use-package helm-semantic)
   (use-package helm-ring)
   (use-package helm-projectile
+    :straight t
     :bind (("C-x f" . helm-projectile)
            ("C-c p f" . helm-projectile-find-file)
            ("C-c p s" . helm-projectile-switch-project)))
@@ -1434,10 +1312,15 @@ comint-replace-by-expanded-history-before-point."
           helm-grep-default-recurse-command
           "ggrep -a -d recurse %e -n%cH -e %p %f")))
 
+(use-package helm-flx
+  :straight t
+  :init (helm-flx-mode +1))
+
 ;; markdown-mode
 ;; -------------
 
 (use-package markdown-mode
+  :straight t
   :init (add-hook 'markdown-mode-hook #'whitespace-mode)
   :commands (markdown-mode gfm-mode)
   :mode (("\\README\\.md\\'" . gfm-mode)
@@ -1449,29 +1332,37 @@ comint-replace-by-expanded-history-before-point."
 ;; -------------------------
 
 (use-package company
+  :straight t
   :defer t
   :diminish company-mode
   :bind ("C-." . company-complete)
   :init (add-hook #'prog-mode-hook #'company-mode)
   :config
-  (progn
-    (setq company-idle-delay 0.4
-          ;; min prefix of 3 chars
-          company-minimum-prefix-length 3
-          company-selection-wrap-around t
-          company-show-numbers t
-          company-dabbrev-downcase nil
-          company-transformers '(company-sort-by-occurrence))
-    (bind-keys :map company-active-map
-               ("C-n" . company-select-next)
-               ("C-p" . company-select-previous)
-               ("C-d" . company-show-doc-buffer)
-               ("<tab>" . company-complete))))
+  (setq company-idle-delay 0.25
+        company-minimum-prefix-length 2
+        company-tooltip-limit 14
+        ;; company-selection-wrap-around t
+        company-tooltip-align-annotations t
+        company-require-match 'never
+        company-global-modes
+        '(not erc-mode message-mode help-mode gud-mode eshell-mode)
+        company-dabbrev-other-buffers nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil
+        company-backends '(company-capf)
+        company-auto-complete-chars nil
+        company-transformers '(company-sort-by-occurrence))
+  (bind-keys :map company-active-map
+             ("C-n" . company-select-next)
+             ("C-p" . company-select-previous)
+             ("C-d" . company-show-doc-buffer)
+             ("<tab>" . company-complete)))
 
 ;; smart-tab
 ;; ---------
 
 (use-package smart-tab
+  :straight (smart-tab :branch "main" :repo "https://git.genehack.net/genehack/smart-tab.git")
   :defer t
   :diminish ""
   :init (global-smart-tab-mode 1)
@@ -1485,6 +1376,7 @@ comint-replace-by-expanded-history-before-point."
 ;; -----------------
 
 (use-package shrink-whitespace
+  :straight t
   :bind (("M-SPC" . shrink-whitespace)
          ("M-S-SPC" . shrink-whitespace)))
 
@@ -1492,6 +1384,7 @@ comint-replace-by-expanded-history-before-point."
 ;; ---------
 
 (use-package undo-tree
+  :straight t
   :init (global-undo-tree-mode t)
   :defer t
   :diminish ""
@@ -1528,76 +1421,54 @@ comint-replace-by-expanded-history-before-point."
         ido-use-filename-at-point 'guess
         ido-max-prospects 10))
 
-;; smex
-;; ----
-
-;; TODO maybe try helm someday?
-(use-package smex
-  :disabled t
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)))
-
 ;; iedit
 ;; -----
 
 ;; Use it to edit every instance of a word in the buffer.
 (use-package iedit
+  :straight t
   :bind ("C-;" . iedit-mode))
-
-;; imenu-anywhere
-;; --------------
-
-(use-package imenu-anywhere
-  :disabled t
-  :bind (("C-c i" . imenu-anywhere)))
 
 ;; beacon
 ;; ------
 
-;; Flash cursor whenever you adjust position.
+;; flash cursor whenever you adjust position.
 (use-package beacon
+  :straight t
   :diminish beacon-mode
   :init (beacon-mode 1))
 
 ;; nix
 ;; ---
 (use-package nix-mode
+  :straight t
   :mode "\\.nix\\'")
 
 ;; smartscan
 ;; ---------
 
 ;; Jump between the same variable in multiple places.
-(use-package smartscan
-  :init (add-hook #'prog-mode-hook #'smartscan-mode)
-  :config
-  (bind-key "M-'" #'other-window smartscan-map))
-
-;; symon
-;; -----
-
-;; Show system monitor when Emacs is inactive
-(use-package symon
-  :if window-system
-  :disabled t
-  :init
-  (setq symon-refresh-rate 2
-        symon-delay 5)
-  (symon-mode 1)
-  :config
-  (setq symon-sparkline-type 'bounded))
+;; (use-package smartscan
+;;   :straight t
+;;   :init (add-hook #'prog-mode-hook #'smartscan-mode)
+;;   :config
+;;   (bind-key "M-'" #'other-window smartscan-map))
 
 ;; vlf
 ;; ---
 
 ;; View large files
-(use-package vlf-setup)
+(use-package vlf
+  :straight t
+  :config
+  (require 'vlf-setup))
 
 ;; rainbow-delimiters-mode
 ;; -----------------------
 
 ;; Use different colors per set of parenthesis. Only in lisps.
 (use-package rainbow-delimiters
+  :straight t
   :init
   (add-hook #'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook #'clojure-mode-hook #'rainbow-delimiters-mode)
