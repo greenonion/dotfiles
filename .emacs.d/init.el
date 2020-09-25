@@ -64,50 +64,6 @@
 (try-load 'mod-writing)
 (try-load 'mod-web)
 
-;; *******************
-;; Extra Functionality
-;; *******************
-
-;; (defadvice server-visit-files (before parse-numbers-in-lines (files proc &optional nowait) activate)
-;;   "Open file with emacsclient with cursors positioned on requested line.
-;; Most of console-based utilities prints filename in format
-;; 'filename:linenumber'.  So you may wish to open filename in that format.
-;; Just call:
-
-;;   emacsclient filename:linenumber
-
-;; and file 'filename' will be opened and cursor set on line 'linenumber'"
-;;   (ad-set-arg 0
-;;               (mapcar (lambda (fn)
-;;                         (let ((name (car fn)))
-;;                           (if (string-match "^\\(.*?\\):\\([0-9]+\\)\\(?::\\([0-9]+\\)\\)?$" name)
-;;                               (cons
-;;                                (match-string 1 name)
-;;                                (cons (string-to-number (match-string 2 name))
-;;                                      (string-to-number (or (match-string 3 name) ""))))
-;;                             fn))) files)))
-
-;; ************
-;; Key Bindings
-;; ************
-
-;; Join on killing lines
-;; (defun kill-and-join-forward (&optional arg)
-;;   "If at end of line, join with following; otherwise kill line.
-;; Deletes whitespace at join."
-;;   (interactive "P")
-;;   (if (and (eolp) (not (bolp)))
-;;       (delete-indentation t)
-;;     (kill-line arg)))
-
-;; (global-set-key (kbd "C-k") 'kill-and-join-forward)
-
-;; ;; Join line to next line
-;; (global-set-key (kbd "M-j")
-;;                 (lambda ()
-;;                   (interactive)
-;;                   (join-line -1)))
-
 ;; **************
 ;; Finalize Setup
 ;; **************
@@ -115,7 +71,7 @@
 ;; Hooks
 (add-hook 'after-startup-hook
           (lambda ()
-            (message "Emacs is here")))
+            (message "Epiphyte has been loaded")))
 
 (defun my/time-since-start ()
   (float-time (time-subtract (current-time)
@@ -133,8 +89,8 @@
                         ,load-file-name elapsed))) t)
 (run-hooks 'after-my-hook)
 
+(setq initial-scratch-message ";; Welcome to Epiphyte")
+
 ;; turn debugging back off
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
-
-;;(put 'narrow-to-region 'disabled nil)
