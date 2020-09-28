@@ -20,7 +20,7 @@ alias ec='emacsclient -c -n'
 function ekill() { emacsclient -e '(kill-emacs)' }
 
 # for connection to a running emacs
-export EDITOR="emacsclient -c"
+export EDITOR="emacsclient -n"
 export ALTERNATIVE_EDITOR="TERM=xterm-256color PATH=$EMACS_HOME/bin:$PATH $EMACS_HOME/Emacs -nw"
 
 # Remove ctrl+y from the keybinds for delayed suspend
@@ -32,6 +32,9 @@ alias gps="ps -c -r -ax -o command,pid,pcpu,time | sed 's/\(PID *\)%/\1 %/' | he
 function strace {
     sudo dtruss -f sudo -u `whoami` $*
 }
+
+# Homebrew
+export PATH="/usr/local/sbin:$PATH"
 
 # Automatically remove old packages
 export HOMEBREW_INSTALL_CLEANUP=1

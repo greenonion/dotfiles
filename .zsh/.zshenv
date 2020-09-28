@@ -15,6 +15,8 @@ if [ -d "$HOME/bin" ] ; then
     export PATH=~/bin:$PATH
 fi
 
+export PATH=~/.npm-global/bin:$PATH
+
 # History
 HISTFILE=$HOME/.zsh-history
 HISTSIZE=10000

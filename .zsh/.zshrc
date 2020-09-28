@@ -1,3 +1,7 @@
+## Language-specific things
+eval "$(rbenv init -)"
+
+
 # Handle dumb terms
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
@@ -115,5 +119,8 @@ done
 unsetopt EXTENDED_GLOB
 
 end=$EPOCHREALTIME
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 printf "+++Loaded files in %0.4f seconds\n" $(($end-$start))
