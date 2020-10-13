@@ -196,6 +196,22 @@
         window-divider-default-right-width 1)
   (window-divider-mode 1))
 
+;; Colors in compilation buffer
+;; (use-package ansi-color
+;;   :config
+;;   (defun my-colorize-compilation-buffer ()
+;;     (when (eq major-mode 'compilation-mode)
+;;       (ansi-color-apply-on-region compilation-filter-start (point))))
+;;   :hook (compilation-filter . my-colorize-compilation-buffer))
+
+(use-package xterm-color
+  :straight t
+  :config
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (defun my/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+  (advice-add 'compilation-filter :around #'my/advice-compilation-filter))
+
 ;; Rainbow delimiters
 ;; ------------------
 
