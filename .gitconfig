@@ -21,3 +21,7 @@
 	insteadOf = skroutz:
 [rebase]
 	autosquash = true
+[fetch]
+	prune = true
+[status]
+	showUntrackedFiles = all
