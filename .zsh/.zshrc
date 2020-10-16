@@ -53,6 +53,7 @@ fi
 
 autoload -U compinit zrecompile
 
+mkdir -p ${HOME}/.zsh-cache
 zsh_cache=${HOME}/.zsh-cache
 if [ $UID -eq 0 ]; then
     compinit
