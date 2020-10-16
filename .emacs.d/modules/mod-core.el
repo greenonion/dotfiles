@@ -130,8 +130,8 @@
 ;; set tab width to 2
 (setq-default default-tab-width 2)
 (setq-default indent-tabs-mode nil)
-;; column threshold is 100
-(setq-default fill-column 100)
+;; column threshold
+(setq-default fill-column 80)
 
 ;; fix some weird color escape sequences
 (setq system-uses-terminfo nil)
