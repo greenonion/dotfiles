@@ -111,7 +111,7 @@
         helm-swoop-speed-or-color nil))
 
 (use-package helm-flyspell
-  :ensure t
+  :straight t
   :after helm
   :bind (:map flyspell-mode-map
               ("C-;" . helm-flyspell-correct)))
