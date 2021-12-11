@@ -1,6 +1,6 @@
 [user]
 	name = Nikos Fertakis
-	email = nikos@skroutz.gr
+	email = nikos.fertakis@gmail.com
 [core]
 	editor = emacsclient -a=\"\"
 [alias]
@@ -13,12 +13,7 @@
 [push]
 	default = simple
 [grep]
-	lineNumber = true
-[url "git@github.skroutz.gr:"]
-	insteadOf = deploy:
-	insteadOf = skroutz:
-	insteadOf = deploy:
-	insteadOf = skroutz:
+	lineNumber = true:
 [rebase]
 	autosquash = true
 [fetch]
