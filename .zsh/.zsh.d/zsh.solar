@@ -8,12 +8,4 @@ export BUFO_USER="nikos"
 export YOGURT_ROOT="$HOME/dvp/skroutz/yogurt"
 alias y="cd $YOGURT_ROOT"
 alias yc="cd $YOGURT_ROOT && bundle exec rails console"
-alias ys="cd $YOGURT_ROOT && bundle exec foreman start"
-
-export HONEY_ROOT="$HOME/dvp/skroutz/honey"
-alias h="cd $HONEY_ROOT"
-
-# test boxes
-alias honey-test-box="cd ~/dvp/skroutz/search_and_insights/vagrant-boxes/honey-test-box/ && vagrant up && cd -"
-alias search-test-box="cd ~/dvp/skroutz/search_and_insights/vagrant-boxes/search-test-box/ && vagrant up && cd -"
-
+alias ys="cd $YOGURT_ROOT && bundle exec overmind start"
