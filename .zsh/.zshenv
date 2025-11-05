@@ -1,21 +1,22 @@
 [[ -o interactive ]] && echo "+++Reading .zshenv"
 
-WORDCHARS='*?_[]~=&;!#$%^(){}'
+# Setup path
+# Establish a sane base PATH if it's empty (common in non-interactive shells)
+if [[ -z "${PATH// }" ]]; then
+  export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+fi
+
+# Add personal bins without overwriting the base PATH
+[[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"
+[[ -d "$HOME/.npm-global/bin" ]] && export PATH="$HOME/.npm-global/bin:$PATH"
+
+export EDITOR=mg # light emacs-like perfect for command line
+export PAGER=less
+
+export WORDCHARS='*?_[]~=&;!#$%^(){}'
 # default is: *?_-.[]~=/&;!#$%^(){}<>
 # other: "*?_-.[]~=&;!#$%^(){}<>\\"
 WORDCHARS=${WORDCHARS:s,/,,}
-
-export EDITOR=nano # to be overwritten later
-export PAGER=less
-
-# Setup path
-
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    export PATH=~/bin:$PATH
-fi
-
-export PATH=~/.npm-global/bin:$PATH
 
 # History
 HISTFILE=$HOME/.zsh-history
@@ -23,25 +24,13 @@ HISTSIZE=10000
 SAVEHIST=5000
 
 ## Sourcing OS-specific things
-OS=$(uname -s); export OS
-if [[ -f ~/.zsh.d/zsh.${OS} ]]; then
-    if [[ ! -z $ZSHDEBUG ]]; then
-        echo +++ ~/.zsh.d/zsh.${OS}
-    fi
-    source ~/.zsh.d/zsh.${OS}
+if [[ -o interactive ]]; then
+  OS=$(uname -s); export OS
+  [[ -f ~/.zsh.d/zsh.${OS} ]] && source ~/.zsh.d/zsh.${OS}
+  export HOSTPREFIX="lalakis"
+  [[ -f ~/.zsh.d/zsh.${HOSTPREFIX} ]] && source ~/.zsh.d/zsh.${HOSTPREFIX}
+  [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 fi
-
-## Sourcing machine-specific things
-export HOSTPREFIX=`hostname` # | cut -d. -f1 | sed 's/.*/\L&/'`
-
-if [[ -f ~/.zsh.d/zsh.${HOSTPREFIX} ]]; then
-    if [[ ! -z $ZSHDEBUG ]]; then
-        echo +++ ~/.zsh.d/zsh.${HOSTPREFIX}
-    fi
-    source ~/.zsh.d/zsh.${HOSTPREFIX}
-fi
-
-export VAGRANT_DEFAULT_PROVIDER=virtualbox
 
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
 [[ ! $TERM == "dumb" ]] && TERM=xterm-256color
