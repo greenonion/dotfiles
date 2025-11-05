@@ -100,8 +100,8 @@ autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
 # Source z.sh if available
-if [ -s /opt/homebrew/etc/profile.d/z.sh ] ; then
-     source /opt/homebrew/etc/profile.d/z.sh ;
+if [ -s ~/bin/z.sh ] ; then
+    source ~/bin/z.sh ;
 fi
 
 # Use zsh syntax highlighting if available
@@ -121,11 +121,14 @@ unsetopt EXTENDED_GLOB
 
 end=$EPOCHREALTIME
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+if [ -n "${XDG_CONFIG_HOME-}" ]; then
+  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+else
+  export NVM_DIR="$HOME/.nvm"
+fi
 
-export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+autoload -U +X bashcompinit && bashcompinit
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 
 printf "+++Loaded files in %0.4f seconds\n" $(($end-$start))
