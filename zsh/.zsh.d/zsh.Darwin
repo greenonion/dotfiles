@@ -34,7 +34,7 @@ function strace {
 }
 
 # Homebrew
-export PATH="/usr/local/sbin:$PATH"
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Automatically remove old packages
 export HOMEBREW_INSTALL_CLEANUP=1

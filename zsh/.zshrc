@@ -1,7 +1,3 @@
-## Language-specific things
-eval "$(rbenv init -)"
-
-
 # Handle dumb terms
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
