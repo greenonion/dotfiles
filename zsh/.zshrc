@@ -1,4 +1,4 @@
-## Language-specific things
+>## Language-specific things
 eval "$(rbenv init -)"
 
 
@@ -119,8 +119,6 @@ for zshrc in ~/.zsh.d/[0-9][0-9]*[^~] ; do
 done
 unsetopt EXTENDED_GLOB
 
-end=$EPOCHREALTIME
-
 if [ -n "${XDG_CONFIG_HOME-}" ]; then
   export NVM_DIR="$XDG_CONFIG_HOME/nvm"
 else
@@ -131,4 +129,5 @@ fi
 autoload -U +X bashcompinit && bashcompinit
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 
+end=$EPOCHREALTIME
 printf "+++Loaded files in %0.4f seconds\n" $(($end-$start))
