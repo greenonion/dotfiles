@@ -38,3 +38,5 @@ else
     }
 fi
 
+# For git specifically:
+git config --global core.editor "mg"

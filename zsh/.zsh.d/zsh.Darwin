@@ -7,21 +7,13 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Emacs
-export EMACS_HOME="/Applications/Emacs.app/Contents/MacOS"
-
-alias emacs='TERM=xterm-256color emacs'
-
-# alias e="TERM=xterm-256color PATH=$EMACS_HOME/bin:$PATH $EMACS_HOME/Emacs -nw"
-# alias ec="emacsclient"
-
 alias e='emacsclient -n'
 alias ec='emacsclient -c -n'
 
 function ekill() { emacsclient -e '(kill-emacs)' }
 
-# for connection to a running emacs
-export EDITOR="emacsclient -n"
-export ALTERNATIVE_EDITOR="TERM=xterm-256color PATH=$EMACS_HOME/bin:$PATH $EMACS_HOME/Emacs -nw"
+export EDITOR='mg'                             # used by most CLI tools
+export VISUAL='emacsclient -c -a "" --wait'    # used by tools preferring VISUAL
 
 # Remove ctrl+y from the keybinds for delayed suspend
 # stty dsusp undef
