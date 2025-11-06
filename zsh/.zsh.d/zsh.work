@@ -1,7 +1,4 @@
 # skroutz specifics
-alias panopticon="ssh wowbagger@panopticon.skroutz.gr"
-alias panalve="ssh wowbagger@panopticon.alve.skroutz.gr"
-alias panscrooge="ssh wowbagger@panopticon.scrooge.skroutz.gr"
 alias stg="ssh wowbagger@vms.skroutz.gr"
 
 export BUFO_USER="nikos"
@@ -9,3 +6,6 @@ export YOGURT_ROOT="$HOME/dvp/skroutz/yogurt"
 alias y="cd $YOGURT_ROOT"
 alias yc="cd $YOGURT_ROOT && bundle exec rails console"
 alias ys="cd $YOGURT_ROOT && bundle exec overmind start"
+
+export AWS_PROFILE=PROD_Yogurt
+alias panopticon="$YOGURT_ROOT/bin/panopticon"
