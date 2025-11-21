@@ -42,11 +42,6 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# zsh completion
-if [ -d ~/.zsh/zsh-completions ] ; then
-    fpath=(~/.zsh/zsh-completions/src $fpath)
-fi
-
 autoload -U compinit zrecompile
 
 mkdir -p ${HOME}/.zsh-cache
@@ -78,6 +73,12 @@ zstyle ':completion:*:manuals.(^1*)' insert-sections true
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' file-list list=20 insert=10
 
+
+# zsh completion
+if [ -d ~/.zsh/zsh-completions ] ; then
+    fpath=(~/.zsh/zsh-completions/src $fpath)
+fi
+eval "$(zoxide init zsh)"
 
 ### OPTIONS ###
 setopt multios               # allow pipes to be split/duplicated
