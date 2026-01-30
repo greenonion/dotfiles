@@ -73,11 +73,12 @@ zstyle ':completion:*:manuals.(^1*)' insert-sections true
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' file-list list=20 insert=10
 
-
 # zsh completion
 if [ -d ~/.zsh/zsh-completions ] ; then
     fpath=(~/.zsh/zsh-completions/src $fpath)
 fi
+
+# z navigation
 eval "$(zoxide init zsh)"
 
 ### OPTIONS ###
@@ -96,15 +97,13 @@ setopt notify
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
-# Source z.sh if available
-if [ -s ~/bin/z.sh ] ; then
-    source ~/bin/z.sh ;
-fi
-
 # Use zsh syntax highlighting if available
 if [ -s ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] ; then
     source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+
+# mise for everything
+eval "$(mise activate zsh)"
 
 # Source ~/.zsh.d/*
 setopt EXTENDED_GLOB
