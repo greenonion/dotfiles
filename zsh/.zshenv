@@ -13,8 +13,7 @@ for p in \
   /opt/homebrew/bin /opt/homebrew/sbin \
   /usr/local/bin /usr/local/sbin \
   "$HOME/bin" \
-  "$HOME/.local/bin" \
-  "$HOME/.npm-global/bin"
+  "$HOME/.local/bin"
 do
   [[ -d "$p" ]] && path=($p $path)
 done
