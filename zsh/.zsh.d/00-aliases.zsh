@@ -6,12 +6,21 @@ alias ll='ls -lh'
 alias l='ls -lh'
 alias la='ls -alh'
 alias lr='ls -lR'
-# colorize greps
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+
+# colorize grep (prefer GNU grep if available)
+if command -v ggrep >/dev/null 2>&1; then
+    alias grep='ggrep --color=auto'
+elif grep --color=auto '' /dev/null >/dev/null 2>&1; then
+    alias grep='grep --color=auto'
+fi
+
 # make less a little more sane
 alias less='less -RX'
 # time helpers
 alias epoch='date +%s'
-alias dt='gdate "+%Y-%m-%dT%H:%M:%S.%3N%zZ"'
+
+if command -v gdate >/dev/null 2>&1; then
+    alias dt='gdate "+%Y-%m-%dT%H:%M:%S.%3N%zZ"'
+else
+    alias dt='date "+%Y-%m-%dT%H:%M:%S%z"'
+fi

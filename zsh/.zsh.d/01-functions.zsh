@@ -1,8 +1,13 @@
 # Functions
 # look up a process quickly
-function pg {
-    # doing it again afterwards for the coloration
-    ps aux | grep -F -i $1 | grep -F -v grep | grep -F -i $1
+pg() {
+    [[ -n "${1-}" ]] || return 2
+
+    if command -v pgrep >/dev/null 2>&1; then
+        pgrep -afi -- "$1"
+    else
+        ps aux | grep -F -i -- "$1" | grep -F -v grep
+    fi
 }
 
 # Check if a URL is up
@@ -13,13 +18,7 @@ function chk-url() {
 # cd back up to the highest level git repo dir
 # thanks Dan!
 function cds () {
-    ORIGINAL_PWD=`pwd`
-    while [ ! -d ".git" -a `pwd` != "/" ]
-    do
-        cd ..
-    done
-    if [ ! -d ".git" ]
-    then
-        cd $ORIGINAL_PWD
-    fi
+    local top
+    top=$(git rev-parse --show-toplevel 2>/dev/null) || return 1
+    builtin cd "$top"
 }
