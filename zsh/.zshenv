@@ -1,12 +1,23 @@
 # Setup path
-# Establish a sane base PATH if it's empty (common in non-interactive shells)
-if [[ -z "${PATH// }" ]]; then
-  export PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+# Setup PATH
+# .zshenv runs for every zsh invocation; keep this fast and non-interactive-safe.
+
+# Establish a sane base PATH if it's empty
+if [[ -z "${PATH-}" || -z "${PATH// }" ]]; then
+  export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
 fi
 
-# Add personal bins without overwriting the base PATH
-[[ -d "$HOME/bin" ]] && export PATH="$HOME/bin:$PATH"
-[[ -d "$HOME/.npm-global/bin" ]] && export PATH="$HOME/.npm-global/bin:$PATH"
+# Ensure common install prefixes are available early (macOS Intel + Apple Silicon)
+typeset -U path
+for p in \
+  /opt/homebrew/bin /opt/homebrew/sbin \
+  /usr/local/bin /usr/local/sbin \
+  "$HOME/bin" \
+  "$HOME/.local/bin" \
+  "$HOME/.npm-global/bin"
+do
+  [[ -d "$p" ]] && path=($p $path)
+done
 
 export EDITOR=mg # light emacs-like perfect for command line
 export PAGER=less
