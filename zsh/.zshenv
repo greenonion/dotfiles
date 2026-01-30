@@ -1,5 +1,3 @@
-[[ -o interactive ]] && echo "+++Reading .zshenv"
-
 # Setup path
 # Establish a sane base PATH if it's empty (common in non-interactive shells)
 if [[ -z "${PATH// }" ]]; then
@@ -45,6 +43,3 @@ if [[ -o interactive ]]; then
 
   [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 fi
-
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
-[[ ! $TERM == "dumb" ]] && TERM=xterm-256color
