@@ -1,13 +1,10 @@
 # Handle dumb terms
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
-echo -n "+++Reading .zshrc"
-[[ -o interactive ]] && echo -n " (for interactive use)"
-echo .
+[[ -o interactive ]] || return
 
-# Used for reporting how load loading takes
-zmodload zsh/datetime
-start=$EPOCHREALTIME
+echo -n "+++Reading .zshrc"
+echo .
 
 # Used for reporting how load loading takes
 zmodload zsh/datetime
@@ -97,11 +94,6 @@ setopt notify
 autoload -U url-quote-magic
 zle -N self-insert url-quote-magic
 
-# Use zsh syntax highlighting if available
-if [ -s ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] ; then
-    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
 # mise for everything
 eval "$(mise activate zsh)"
 
@@ -124,6 +116,11 @@ fi
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 autoload -U +X bashcompinit && bashcompinit
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+
+# Use zsh syntax highlighting if available
+if [ -s ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] ; then
+    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 end=$EPOCHREALTIME
 printf "+++Loaded files in %0.4f seconds\n" $(($end-$start))
