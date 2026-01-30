@@ -1,9 +1,10 @@
 # OS X Specifics
 # java specifics
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+if /usr/libexec/java_home -v 1.8 >/dev/null 2>&1; then
+    export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+fi
 
 # specify locale
-export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # Emacs
@@ -22,7 +23,7 @@ alias gps="ps -c -r -ax -o command,pid,pcpu,time | sed 's/\(PID *\)%/\1 %/' | he
 
 # A function to mimic Linux's strace, whichout running the program as root
 function strace {
-    sudo dtruss -f sudo -u `whoami` $*
+    sudo dtruss -f sudo -u "$(id -un)" "$@"
 }
 
 # Homebrew
