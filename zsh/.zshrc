@@ -42,6 +42,11 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
+# zsh completion
+if [ -d ~/.zsh/zsh-completions/src ] ; then
+    fpath=(~/.zsh/zsh-completions/src $fpath)
+fi
+
 autoload -U compinit zrecompile
 
 mkdir -p ${HOME}/.zsh-cache
@@ -65,18 +70,13 @@ zstyle ':completion:*:my-accounts' users-hosts $my_accounts
 zstyle ':completion:*:other-accounts' users-hosts $other_accounts
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
 zstyle ':completion:*:descriptions' format "- %d -"
-zstyle ':completion:*:corrections' format "- %d - (errors %e})"
+zstyle ':completion:*:corrections' format "- %d - (errors %e)"
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' file-list list=20 insert=10
-
-# zsh completion
-if [ -d ~/.zsh/zsh-completions ] ; then
-    fpath=(~/.zsh/zsh-completions/src $fpath)
-fi
 
 # z navigation
 eval "$(zoxide init zsh)"
