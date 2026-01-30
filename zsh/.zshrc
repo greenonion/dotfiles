@@ -107,16 +107,6 @@ for zshrc in ~/.zsh.d/[0-9][0-9]*[^~] ; do
 done
 unsetopt EXTENDED_GLOB
 
-if [ -n "${XDG_CONFIG_HOME-}" ]; then
-  export NVM_DIR="$XDG_CONFIG_HOME/nvm"
-else
-  export NVM_DIR="$HOME/.nvm"
-fi
-
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-autoload -U +X bashcompinit && bashcompinit
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-
 # Use zsh syntax highlighting if available
 if [ -s ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] ; then
     source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
