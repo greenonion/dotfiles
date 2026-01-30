@@ -97,6 +97,25 @@ zle -N self-insert url-quote-magic
 # mise for everything
 eval "$(mise activate zsh)"
 
+## OS/per-machine config
+OS=$(uname -s); export OS
+[[ -r "$HOME/.zsh.d/zsh.${OS}" ]] && source "$HOME/.zsh.d/zsh.${OS}"
+
+# Per-machine selector using ~/.zsh-host only
+# Create the file with something like `echo work > ~/.zsh-host`
+typeset -g HOSTTYPE="default"
+
+if [[ -r "$HOME/.zsh-host" ]]; then
+    HOSTTYPE="$(<"$HOME/.zsh-host")"
+fi
+
+# Normalize: lowercase and filename-safe
+HOSTTYPE=${(L)HOSTTYPE}
+HOSTTYPE=${HOSTTYPE//[^A-Za-z0-9._-]/-}
+
+# Load per-machine config, e.g. ~/.zsh.d/zsh.personal
+[[ -r "$HOME/.zsh.d/zsh.${HOSTTYPE}" ]] && source "$HOME/.zsh.d/zsh.${HOSTTYPE}"
+
 # Source ~/.zsh.d/*
 setopt EXTENDED_GLOB
 for zshrc in ~/.zsh.d/[0-9][0-9]*[^~] ; do
