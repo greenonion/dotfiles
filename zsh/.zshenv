@@ -13,7 +13,8 @@ for p in \
   /opt/homebrew/bin /opt/homebrew/sbin \
   /usr/local/bin /usr/local/sbin \
   "$HOME/bin" \
-  "$HOME/.local/bin"
+  "$HOME/.local/bin" \
+  "$HOME/.emacs.d/bin"
 do
   [[ -d "$p" ]] && path=($p $path)
 done
