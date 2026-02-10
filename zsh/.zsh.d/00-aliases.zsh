@@ -24,3 +24,8 @@ if command -v gdate >/dev/null 2>&1; then
 else
     alias dt='date "+%Y-%m-%dT%H:%M:%S%z"'
 fi
+
+# lazygit ftw
+if command -v lazygit >/dev/null 2>&1; then
+    alias lg='lazygit'
+fi
