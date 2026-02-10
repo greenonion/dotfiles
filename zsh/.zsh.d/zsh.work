@@ -9,3 +9,5 @@ alias ys="cd $YOGURT_ROOT && bundle exec overmind start"
 
 export AWS_PROFILE=PROD_Yogurt
 alias panopticon="$YOGURT_ROOT/bin/panopticon"
+
+export NODE_EXTRA_CA_CERTS="$HOME/cloudflare-warp.pem"
