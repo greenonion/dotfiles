@@ -14,7 +14,8 @@ for p in \
   /usr/local/bin /usr/local/sbin \
   "$HOME/bin" \
   "$HOME/.local/bin" \
-  "$HOME/.emacs.d/bin"
+  "$HOME/.emacs.d/bin" \
+  "$HOME/.bun/bin"
 do
   [[ -d "$p" ]] && path=($p $path)
 done
