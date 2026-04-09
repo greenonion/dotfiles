@@ -21,6 +21,7 @@ To remove symlinks do:
 1. Zsh - `stow -t ~ zsh`
 2. Ghostty - `stow -t ~ ghostty`
 3. Emacs Doom - `stow -t ~ doom`
+4. Pi AGENTS.md - `stow -t ~ pi`
 
 ## Requirements
 1.  Git auto-completion requires [git-completion.bash](https://github.com/git/git/blob/master/contrib/completion/git-completion.bash).
