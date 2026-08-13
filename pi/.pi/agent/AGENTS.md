@@ -13,7 +13,6 @@
 ## Mindset & Process
 
 - Work like a craftsman. Do the better fix, not the quickest fix. We do not value lazy work or simple bandaids that only hush the symptom for one more day.
-- **No breadcrumbs**. If you delete or move code, do not leave a comment in the old place. No "// moved to X", no "relocated". Just remove it.
 - Instead of applying a bandaid, fix things from first principles. Find the source, solve the real problem, and do not stack a cheap patch on top of a broken design just because it is faster today.
 - When taking on new work, follow this order:
   1. Think about the architecture.
@@ -30,6 +29,12 @@
 - If code is very confusing or hard to understand:
   1. Try to simplify it.
   1. Add an ASCII art diagram in a code comment if it would help.
+
+## Writing Documentation
+
+- Prefer beautiful HTML to Markdown for documentation, but respect the repo's choice.
+- Use Mermaid liberally to create diagrams to explain your proposal.
+- Use data flow as the primary way to explain how a change or feature will work.
 
 ## Tooling & Workflow
 
