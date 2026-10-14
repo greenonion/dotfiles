@@ -1,0 +1,3 @@
+# goriot: remote development through Herdr.
+export EDITOR='emacsclient -t -a ""'
+export VISUAL="$EDITOR"

@@ -1,6 +1,10 @@
 # Aliases
 # various ls helpers
-alias ls='ls -GF'
+if [[ "$OSTYPE" == linux* ]]; then
+    alias ls='ls --color=auto -F'
+else
+    alias ls='ls -GF'
+fi
 alias l.='ls -d .*'
 alias ll='ls -lh'
 alias l='ls -lh'
@@ -10,7 +14,7 @@ alias lr='ls -lR'
 # colorize grep (prefer GNU grep if available)
 if command -v ggrep >/dev/null 2>&1; then
     alias grep='ggrep --color=auto'
-elif grep --color=auto '' /dev/null >/dev/null 2>&1; then
+elif grep --color=auto -q x <<< x 2>/dev/null; then
     alias grep='grep --color=auto'
 fi
 

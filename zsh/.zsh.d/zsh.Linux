@@ -1,0 +1,3 @@
+# Terminal Emacs client; start a daemon if one is not running.
+# Wait until editing finishes so this also works for Git and other CLI tools.
+alias ec='emacsclient -t -a ""'
