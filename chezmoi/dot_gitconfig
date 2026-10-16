@@ -1,8 +1,6 @@
 [user]
 	name = Nikos Fertakis
 	email = nikos.fertakis@gmail.com
-[core]
-	editor = emacsclient -a=\"\"
 [alias]
 	st = status
 	unstage = reset HEAD --
@@ -10,10 +8,16 @@
 	ci = commit
 	co = checkout
 	g = grep
+[init]
+	defaultBranch = main
+[pull]
+	ff = only
+[rerere]
+	enabled = true
 [push]
 	default = simple
 [grep]
-	lineNumber = true:
+	lineNumber = true
 [rebase]
 	autosquash = true
 [fetch]

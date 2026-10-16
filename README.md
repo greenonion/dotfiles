@@ -23,6 +23,53 @@ To remove symlinks do:
 3. Emacs Doom - `stow -t ~ doom`
 4. Pi AGENTS.md - `stow -t ~ pi`
 
+## Git configuration via chezmoi
+
+Git configuration is managed by chezmoi. Other configurations still use Stow.
+The root `.chezmoiroot` file selects `chezmoi/` as the source subtree; chezmoi
+does not manage the Stow packages.
+
+Install chezmoi with `mise use --global chezmoi@latest`, or on macOS with
+`brew install chezmoi`. In `~/.config/chezmoi/chezmoi.toml`, set the absolute
+path to this repository's checkout (use your own path on each machine):
+
+```toml
+sourceDir = "/home/nikos/dvp/dotfiles"
+```
+
+Before the first application, inspect any existing Git includes and machine
+settings. Back up `~/.gitconfig` to a new filename. For this host's initial
+migration, the backup is `~/.gitconfig.before-chezmoi`. Do not overwrite it.
+Then preview and apply only Git configuration:
+
+```sh
+chezmoi managed
+chezmoi diff ~/.gitconfig
+chezmoi apply ~/.gitconfig
+```
+
+The managed-file list should contain only `.gitconfig`. Do not let another
+manager or a symlink own that destination. The shared Git configuration does
+not set `core.editor`; set `VISUAL` or `EDITOR` for each machine instead.
+
+For later edits, change the source and review before applying:
+
+```sh
+chezmoi edit ~/.gitconfig
+chezmoi diff ~/.gitconfig
+chezmoi apply ~/.gitconfig
+```
+
+Editing `~/.gitconfig` directly does not update the repository. Commit and sync
+source changes through Git as usual, then preview and apply on each machine.
+If chezmoi is not on the current shell's PATH, use `mise exec -- chezmoi`.
+
+Validate this integration without changing your home directory:
+
+```sh
+mise exec -- bash tests/chezmoi-git.sh
+```
+
 ## Zsh platform and machine settings
 
 Zsh loads `.zsh.d/zsh.$(uname -s)` for platform settings, then the machine
