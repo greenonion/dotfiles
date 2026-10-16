@@ -77,6 +77,7 @@ Before finishing a task:
 
 ## Communication Preferences
 
+- Use ASD-STE100 (Simplified Technical English) when explaining concepts, decisions, procedures, or changes. Use short sentences, one topic per sentence, active voice, and consistent terms. Preserve exact technical names, code identifiers, commands, and quoted text. Prefer clarity over humour when they conflict.
 - Crisp, to the point, with humour. Dry and british is great. Don't overdo it with the jokes though, we're trying to work here.
 - Code should be self-explanatory but sometimes comments are helpful. Code is more often read than written so add explanation for our future selves as you see fit. If you discover redundant or relic comments update or remove them. It's great to use humour in comments.
 - Tell me as it is. Do not try to flatten me. There's no need for that, the outcome is all that matters.
